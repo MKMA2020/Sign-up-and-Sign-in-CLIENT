@@ -6,11 +6,8 @@
 package mkma.signupsignin.ui;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.ResourceBundle;
-import java.util.StringJoiner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javafx.beans.Observable;
@@ -20,11 +17,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-
-import javafx.scene.control.Label;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -38,7 +30,7 @@ import user_message.User;
 
 /**
  *
- * @author 2dam
+ * @author Kerman Rodríguez
  */
 public class SignUpController implements Initializable {
 
@@ -51,29 +43,6 @@ public class SignUpController implements Initializable {
     @FXML
     private PasswordField txtPassAgain;
     @FXML
-
-    private Stage stage;
-
-    public Stage getStage() {
-        return stage;
-    }
-
-    public void setStage(Stage stage) {
-        this.stage = stage;
-    }
-
-    public Label getLabel() {
-        return label;
-    }
-
-    public void setLabel(Label label) {
-        this.label = label;
-    }
-    
-    @FXML
-    private Label label;
-    
-
     private TextField txtEmail;
     @FXML
     private TextField txtName;
@@ -81,7 +50,6 @@ public class SignUpController implements Initializable {
     private Button btnSignUp;
     @FXML
     private Button btnBack;
-
 
     @FXML
     private void handleButtonSignUp(ActionEvent event) {
@@ -93,39 +61,24 @@ public class SignUpController implements Initializable {
             user.setEmail(txtEmail.getText());
             user.setFullName(txtName.getText());
             System.out.println("gg bro");
-        } else
+        } else {
             System.out.println("fallo :(");
+        }
     }
 
     @FXML
     private void handleButtonBack(ActionEvent event) throws IOException {
-           FXMLLoader loader = new FXMLLoader(getClass().getResource("../ui/SignIn.fxml"));
-           Parent root = (Parent) loader.load();
-       
-           SignInController controller = (loader.getController());
-           controller.setStage(stage);
-           controller.initStage(root);
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("../ui/SignIn.fxml"));
+        Parent root = (Parent) loader.load();
+
+        SignInController controller = (loader.getController());
+        controller.setStage(stage);
+        controller.initStage(root);
     }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-
-    }    
-
-    void initStage(Parent root) {
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.setTitle("Sign In");
-        stage.setResizable(false);
-        
-        //stage.setOnShowing(this::handleWindowShowing);
-        //txtUser.textProperty().addListener((this::textchanged));
-       // txtPass.textProperty().addListener((this::textchanged));
-        stage.show();
-    }
-    
-
     }
 
     public Stage getStage() {
@@ -169,10 +122,10 @@ public class SignUpController implements Initializable {
     private boolean validate() {
         boolean error = false;
         String alertList = "";
- 
+
         if (txtUser.getText().length() < 5) {
             error = true;
-            alertList = alertList.concat("The username is too short.\n");           
+            alertList = alertList.concat("The username is too short.\n");
         }
 
         if (txtUser.getText().length() > 20) {
@@ -197,7 +150,7 @@ public class SignUpController implements Initializable {
 
         if (!isValidEmail(txtEmail.getText())) {
             error = true;
-           alertList = alertList.concat("The email format is not valid.\n");
+            alertList = alertList.concat("The email format is not valid.\n");
         }
         if (error) {
             Alert listAllAlerts = new Alert(AlertType.ERROR,
@@ -210,18 +163,21 @@ public class SignUpController implements Initializable {
 
     public static boolean isValidPass(String s) {
         boolean valid = true;
-        Pattern pNumber = Pattern.compile( "[0-9]" );
-        Matcher m = pNumber.matcher( s );
-        if (!m.find())
+        Pattern pNumber = Pattern.compile("[0-9]");
+        Matcher m = pNumber.matcher(s);
+        if (!m.find()) {
             valid = false;
+        }
         Pattern pUpper = Pattern.compile("[A-Z]");
         m = pUpper.matcher(s);
-        if (!m.find())
+        if (!m.find()) {
             valid = false;
+        }
         Pattern pLower = Pattern.compile("[a-z]");
         m = pLower.matcher(s);
-        if (!m.find())
+        if (!m.find()) {
             valid = false;
+        }
         return valid;
     }
 
@@ -239,4 +195,5 @@ public class SignUpController implements Initializable {
             btnSignUp.setDisable(false);
         }
     }
+
 }
