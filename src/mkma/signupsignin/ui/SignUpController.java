@@ -20,6 +20,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+
+import javafx.scene.control.Label;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -46,6 +51,29 @@ public class SignUpController implements Initializable {
     @FXML
     private PasswordField txtPassAgain;
     @FXML
+
+    private Stage stage;
+
+    public Stage getStage() {
+        return stage;
+    }
+
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
+
+    public Label getLabel() {
+        return label;
+    }
+
+    public void setLabel(Label label) {
+        this.label = label;
+    }
+    
+    @FXML
+    private Label label;
+    
+
     private TextField txtEmail;
     @FXML
     private TextField txtName;
@@ -53,6 +81,7 @@ public class SignUpController implements Initializable {
     private Button btnSignUp;
     @FXML
     private Button btnBack;
+
 
     @FXML
     private void handleButtonSignUp(ActionEvent event) {
@@ -81,6 +110,22 @@ public class SignUpController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+
+    }    
+
+    void initStage(Parent root) {
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.setTitle("Sign In");
+        stage.setResizable(false);
+        
+        //stage.setOnShowing(this::handleWindowShowing);
+        //txtUser.textProperty().addListener((this::textchanged));
+       // txtPass.textProperty().addListener((this::textchanged));
+        stage.show();
+    }
+    
+
     }
 
     public Stage getStage() {
@@ -194,5 +239,4 @@ public class SignUpController implements Initializable {
             btnSignUp.setDisable(false);
         }
     }
-
 }
