@@ -26,7 +26,7 @@ public class App extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
         
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("../ui/SignIn.fxml"));
+       FXMLLoader loader = new FXMLLoader(getClass().getResource("../ui/SignIn.fxml"));
        Parent root = (Parent) loader.load();
        
        SignInController controller = (loader.getController());
