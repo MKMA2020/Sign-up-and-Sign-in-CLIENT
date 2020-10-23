@@ -31,7 +31,7 @@ public class App extends Application {
        
        SignInController controller = (loader.getController());
        controller.setStage(primaryStage);
-        controller.initStage(root);
+       controller.initStage(root);
     }
 
     /**
