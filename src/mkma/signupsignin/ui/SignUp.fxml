@@ -26,7 +26,7 @@
             <Button fx:id="btnSignUp" layoutX="54.0" layoutY="227.0" mnemonicParsing="false" onAction="#handleButtonSignUp" prefHeight="25.0" prefWidth="202.0" style="-fx-background-color: #3f4988;" text="Sign up" textFill="#909090" />
          </children>
       </AnchorPane>
-      <Button fx:id="btnBack" layoutX="276.0" layoutY="361.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="149.0" style="-fx-background-color: #3f4988;" text="Go back" textFill="#909090" AnchorPane.leftAnchor="276.0" AnchorPane.rightAnchor="275.0" />
+      <Button fx:id="btnBack" layoutX="276.0" layoutY="361.0" mnemonicParsing="false" onAction="#handleButtonBack" prefHeight="25.0" prefWidth="149.0" style="-fx-background-color: #3f4988;" text="Go back" textFill="#909090" AnchorPane.leftAnchor="276.0" AnchorPane.rightAnchor="275.0" />
       <ImageView fx:id="imgLogo1" fitHeight="152.0" fitWidth="193.0" layoutY="248.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../resources/MKMALogo.png" />
