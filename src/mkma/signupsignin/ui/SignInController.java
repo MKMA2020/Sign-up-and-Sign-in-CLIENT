@@ -19,18 +19,16 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
 
 /**
  *
- * @author 2dam
+ * @author Martin Gros
  */
 public class SignInController implements Initializable {
 
@@ -39,8 +37,6 @@ public class SignInController implements Initializable {
 
     @FXML
     private TextField txtUser;
-    @FXML
-    private Text lblTitle;
     @FXML
     private PasswordField txtPass;
     @FXML
@@ -52,43 +48,32 @@ public class SignInController implements Initializable {
     private void handleButtonSignIn(ActionEvent event) {
         
         if (this.txtUser.getText().trim().equals("")) {
-            Alert alertEmpty = new Alert(Alert.AlertType.ERROR, "Los campos usuario y contraseña"
-                    + " deben contener algo", ButtonType.OK);
+            Alert alertEmpty = new Alert(Alert.AlertType.ERROR, "User and password fields"
+                    + " are empty", ButtonType.OK);
             alertEmpty.showAndWait();
         
 
         }
         if (this.txtUser.getText().trim().length()<5){
-            Alert alertShortUser = new Alert(Alert.AlertType.ERROR, "El nombre de usuario"
-                    + " es demasiado corto", ButtonType.OK);
+            Alert alertShortUser = new Alert(Alert.AlertType.ERROR, "Username is"
+                    + " too short", ButtonType.OK);
             alertShortUser.showAndWait();
             
         
             
         }
         if (this.txtUser.getText().trim().length()>20){
-            Alert alertlongUser = new Alert(Alert.AlertType.ERROR, "El nombre de usuario"
-                    + " es demasiado largo", ButtonType.OK);
+            Alert alertlongUser = new Alert(Alert.AlertType.ERROR, "Username is"
+                    + " too long", ButtonType.OK);
             alertlongUser.showAndWait();}
-        
-        System.out.println("You clicked me!");
-
     }
 
     @FXML
     private void handleButtonSignUp(ActionEvent event) throws IOException {
-
-        start_signup(stage);
-
-        
-        System.out.println("You clicked me!");
-
+      start_signup(stage);
     }
 
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
 
-    }
 
     public Stage getStage() {
         return stage;
@@ -113,7 +98,7 @@ public class SignInController implements Initializable {
     private void handleWindowShowing(WindowEvent event) {
         btnSignIn.setDisable(true);
         btnSignUp.setTooltip(new Tooltip("Click to sign up!"));
-        btnSignIn.setTooltip(new Tooltip("Click to log in :)"));
+        btnSignIn.setTooltip(new Tooltip("Click to log in!"));
 
     }
 
@@ -134,6 +119,11 @@ public class SignInController implements Initializable {
         SignUpController controller = (loader.getController());
         controller.setStage(primaryStage);
         controller.initStage(root);
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        
     }
 
 }
