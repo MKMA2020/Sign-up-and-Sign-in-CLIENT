@@ -79,6 +79,7 @@ public class SignUpController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        btnSignUp.setDisable(true);
     }
 
     public Stage getStage() {
@@ -94,11 +95,11 @@ public class SignUpController implements Initializable {
         stage.setTitle("Sign-up");
         stage.setResizable(false);
         stage.setScene(scene);
-        stage.setOnShowing(this::handleWindowShowing);
+        handleWindowShowing();
         stage.show();
     }
 
-    private void handleWindowShowing(WindowEvent event) {
+    private void handleWindowShowing() {
         btnSignUp.setDisable(true);
 
         btnSignUp.setTooltip(new Tooltip("Click to create an user "

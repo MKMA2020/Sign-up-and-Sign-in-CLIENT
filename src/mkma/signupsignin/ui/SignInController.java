@@ -88,14 +88,14 @@ public class SignInController implements Initializable {
         stage.setScene(scene);
         stage.setTitle("Sign In");
         stage.setResizable(false);
-        stage.setOnShowing(this::handleWindowShowing);
+        handleWindowShowing();
         txtUser.textProperty().addListener((this::textchanged));
         txtPass.textProperty().addListener((this::textchanged));
         stage.show();
 
     }
 
-    private void handleWindowShowing(WindowEvent event) {
+    private void handleWindowShowing() {
         btnSignIn.setDisable(true);
         btnSignUp.setTooltip(new Tooltip("Click to sign up!"));
         btnSignIn.setTooltip(new Tooltip("Click to log in!"));
@@ -123,6 +123,7 @@ public class SignInController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        btnSignIn.setDisable(true);
         
     }
 
