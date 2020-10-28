@@ -5,10 +5,15 @@
  */
 package mkma.signupsignin.signable;
 
+import signable.Signable;
+
 /**
  *
  * @author 2dam
  */
 public class SignableFactory {
     
+    public Signable getSignable() {
+        return (new SignableImplementation());
+    }
 }

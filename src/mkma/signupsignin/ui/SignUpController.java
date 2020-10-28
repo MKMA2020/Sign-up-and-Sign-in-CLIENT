@@ -1,9 +1,11 @@
 package mkma.signupsignin.ui;
 
+import exceptions.DataBaseConnectionException;
+import exceptions.PassNotCorrectException;
+import exceptions.ServerErrorException;
+import exceptions.TimeOutException;
+import exceptions.UserNotFoundException;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
-import java.net.Socket;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
@@ -23,7 +25,8 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.stage.Stage;
-import user_message.Message;
+import mkma.signupsignin.signable.SignableFactory;
+import signable.Signable;
 import user_message.User;
 
 /**
@@ -53,24 +56,22 @@ public class SignUpController implements Initializable {
 
     /**
      * Method that runs when you click the sign-up button. It calls the
-     * validation method and if valid, it sends a message.
+     * validation method and if valid, it sends a user to the implementation.
      *
      * @param event it is the clicking event of the button
      */
     @FXML
-    private void handleButtonSignUp(ActionEvent event) {
+    private void handleButtonSignUp(ActionEvent event) throws DataBaseConnectionException, PassNotCorrectException, ServerErrorException, TimeOutException, UserNotFoundException {
         boolean error = validate();
         if (!error) {
             User user = new User();
             user.setLogin(txtUser.getText());
             user.setPassword(txtPass.getText());
             user.setEmail(txtEmail.getText());
-            user.setFullName(txtName.getText());
-            Message message = new Message();
-            message.setUser(user);
-            message.setMessageType(2);
-
-            sendMessage(message);
+            user.setFullName(txtName.getText());   
+            SignableFactory factory = new SignableFactory();
+            Signable signable = factory.getSignable();
+            signable.signIn(user);
         }
     }
 
@@ -274,42 +275,4 @@ public class SignUpController implements Initializable {
             btnSignUp.setDisable(false);
         }
     }
-
-    /**
-     * This method creates a socket that will send a Message object to the
-     * server application.
-     *
-     * @param message the message with the user and the message type
-     */
-    private void sendMessage(Message message) {
-        Socket socket = null;
-        OutputStream outputStream = null;
-        ObjectOutputStream objectOutputStream = null;
-
-        try {
-            socket = new Socket("localhost", 6302);
-            outputStream = socket.getOutputStream();
-            objectOutputStream = new ObjectOutputStream(outputStream);
-            objectOutputStream.writeObject(message);
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        } finally {
-            try {
-                objectOutputStream.close();
-            } catch (IOException ex) {
-                System.out.println(ex.getMessage());
-            }
-            try {
-                outputStream.close();
-            } catch (IOException ex) {
-                System.out.println(ex.getMessage());
-            }
-            try {
-                socket.close();
-            } catch (IOException ex) {
-                System.out.println(ex.getMessage());
-            }
-        }
-    }
-
 }

@@ -5,17 +5,14 @@
  */
 package mkma.signupsignin.ui;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
+import exceptions.DataBaseConnectionException;
+import exceptions.PassNotCorrectException;
+import exceptions.ServerErrorException;
+import exceptions.TimeOutException;
+import exceptions.UserNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -29,10 +26,9 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
-import user_message.Message;
+import mkma.signupsignin.signable.SignableFactory;
+import signable.Signable;
 import user_message.User;
 
 /**
@@ -54,7 +50,7 @@ public class SignInController implements Initializable {
     private Button btnSignUp;
 
     @FXML
-    private void handleButtonSignIn(ActionEvent event) {
+    private void handleButtonSignIn(ActionEvent event) throws UserNotFoundException, TimeOutException, PassNotCorrectException, DataBaseConnectionException, ServerErrorException {
         
         boolean error = false;
         
@@ -78,13 +74,11 @@ public class SignInController implements Initializable {
         }
         if (!error) {
             User user = new User();
-            user.setLogin(txtUser.getText().toString());
-            user.setPassword(txtPass.getText().toString());
-            Message message = new Message();
-            message.setUser(user);
-            message.setMessageType(1);
-            
-            sendMessage(message);
+            user.setLogin(txtUser.getText());
+            user.setPassword(txtPass.getText());
+            SignableFactory factory = new SignableFactory();
+            Signable signable = factory.getSignable();
+            signable.signIn(user);
         } 
             
     }
@@ -146,37 +140,6 @@ public class SignInController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         btnSignIn.setDisable(true);
         
-    }
-
-    private void sendMessage(Message message) {
-        Socket socket = null;
-        OutputStream outputStream = null;
-        ObjectOutputStream objectOutputStream = null;
-        
-        try{
-            socket = new Socket("localhost", 6302);
-            outputStream = socket.getOutputStream();
-            objectOutputStream = new ObjectOutputStream(outputStream);
-            objectOutputStream.writeObject(message);
-        } catch (Exception e){
-            System.out.println (e.getMessage());
-        }finally {
-            try {
-                objectOutputStream.close();
-            } catch (IOException ex) {
-                System.out.println (ex.getMessage());
-            }
-            try {
-                outputStream.close();
-            } catch (IOException ex) {
-                System.out.println (ex.getMessage());
-            }
-            try {
-                socket.close();
-            } catch (IOException ex) {
-                System.out.println (ex.getMessage());
-            }
-        }
     }
     }
 
