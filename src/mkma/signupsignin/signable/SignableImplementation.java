@@ -20,21 +20,36 @@ import user_message.Message;
 import user_message.User;
 
 /**
- *
- * @author 2dam
+ * This class contains the sign-up, sign-in and sign-out methods implemented
+ * from the signable interface.
+ * @author Kerman Rodríguez, Martin Gros and Aitor García
  */
 public class SignableImplementation implements Signable{
-
+    /**
+     * This method creates a message with the user and sends it 
+     * to the server in order to check if the user exists, and 
+     * log them in.
+     * @param user the user that needs a sign-in
+     * @return the user to check if the method was successful 
+     * @throws DataBaseConnectionException
+     * @throws PassNotCorrectException
+     * @throws ServerErrorException
+     * @throws TimeOutException
+     * @throws UserNotFoundException 
+     */
     @Override
     public User signIn(User user) throws DataBaseConnectionException, PassNotCorrectException, ServerErrorException, TimeOutException, UserNotFoundException {
+        //Creates the message
         Message message = new Message();
         message.setUser(user);
         message.setMessageType(1);
         
+        //Creates the socket and the output stream
         Socket socket = null;
         OutputStream outputStream = null;
         ObjectOutputStream objectOutputStream = null;
-
+        
+        //Defines the object and the stream, and sends a message
         try {
             socket = new Socket("localhost", 6302);
             outputStream = socket.getOutputStream();
@@ -42,6 +57,7 @@ public class SignableImplementation implements Signable{
             objectOutputStream.writeObject(message);
         } catch (IOException e) {
             System.out.println(e.getMessage());
+            //Closes the socket and the stream
         } finally {
             try {
                 objectOutputStream.close();
@@ -61,18 +77,29 @@ public class SignableImplementation implements Signable{
         }
         return user;
     }
-
+    /**
+     * This method creates a message with the user and sends it
+     * to the server, in order to add him to the database.
+     * @param user the user that needs a sign-up
+     * @return the user to check if the method was successful 
+     * @throws DataBaseConnectionException
+     * @throws ServerErrorException
+     * @throws TimeOutException
+     * @throws UserExistsException 
+     */
     @Override
     public User signUp(User user) throws DataBaseConnectionException, ServerErrorException, TimeOutException, UserExistsException {
-        
+        //Creates the message
         Message message = new Message();
         message.setUser(user);
-        message.setMessageType(2);
+        message.setMessageType(1);
         
+        //Creates the socket and the output stream
         Socket socket = null;
         OutputStream outputStream = null;
         ObjectOutputStream objectOutputStream = null;
-
+        
+        //Defines the object and the stream, and sends a message
         try {
             socket = new Socket("localhost", 6302);
             outputStream = socket.getOutputStream();
@@ -80,6 +107,7 @@ public class SignableImplementation implements Signable{
             objectOutputStream.writeObject(message);
         } catch (IOException e) {
             System.out.println(e.getMessage());
+            //Closes the socket and the stream
         } finally {
             try {
                 objectOutputStream.close();
@@ -99,7 +127,11 @@ public class SignableImplementation implements Signable{
         }
         return user;
     }
-
+    /**
+     * This method opens a new windows and greets the user that has logged in.
+     * @param user the user that needs a sign-out
+     * @return the user to check if the method was successful 
+     */
     @Override
     public User signOut(User user) {
         
