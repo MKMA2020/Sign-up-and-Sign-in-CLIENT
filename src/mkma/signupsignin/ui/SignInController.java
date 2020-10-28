@@ -5,7 +5,14 @@
  */
 package mkma.signupsignin.ui;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.beans.InvalidationListener;
@@ -25,6 +32,8 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import user_message.Message;
+import user_message.User;
 
 /**
  *
@@ -47,25 +56,37 @@ public class SignInController implements Initializable {
     @FXML
     private void handleButtonSignIn(ActionEvent event) {
         
+        boolean error = false;
+        
         if (this.txtUser.getText().trim().equals("")) {
             Alert alertEmpty = new Alert(Alert.AlertType.ERROR, "User and password fields"
                     + " are empty", ButtonType.OK);
             alertEmpty.showAndWait();
-        
-
+            error = true;
         }
         if (this.txtUser.getText().trim().length()<5){
             Alert alertShortUser = new Alert(Alert.AlertType.ERROR, "Username is"
                     + " too short", ButtonType.OK);
             alertShortUser.showAndWait();
-            
-        
-            
+            error = true;     
         }
         if (this.txtUser.getText().trim().length()>20){
             Alert alertlongUser = new Alert(Alert.AlertType.ERROR, "Username is"
                     + " too long", ButtonType.OK);
-            alertlongUser.showAndWait();}
+            alertlongUser.showAndWait();
+            error = true;
+        }
+        if (!error) {
+            User user = new User();
+            user.setLogin(txtUser.getText().toString());
+            user.setPassword(txtPass.getText().toString());
+            Message message = new Message();
+            message.setUser(user);
+            message.setMessageType(1);
+            
+            sendMessage(message);
+        } 
+            
     }
 
     @FXML
@@ -127,4 +148,36 @@ public class SignInController implements Initializable {
         
     }
 
-}
+    private void sendMessage(Message message) {
+        Socket socket = null;
+        OutputStream outputStream = null;
+        ObjectOutputStream objectOutputStream = null;
+        
+        try{
+            socket = new Socket("localhost", 6302);
+            outputStream = socket.getOutputStream();
+            objectOutputStream = new ObjectOutputStream(outputStream);
+            objectOutputStream.writeObject(message);
+        } catch (Exception e){
+            System.out.println (e.getMessage());
+        }finally {
+            try {
+                objectOutputStream.close();
+            } catch (IOException ex) {
+                System.out.println (ex.getMessage());
+            }
+            try {
+                outputStream.close();
+            } catch (IOException ex) {
+                System.out.println (ex.getMessage());
+            }
+            try {
+                socket.close();
+            } catch (IOException ex) {
+                System.out.println (ex.getMessage());
+            }
+        }
+    }
+    }
+
+

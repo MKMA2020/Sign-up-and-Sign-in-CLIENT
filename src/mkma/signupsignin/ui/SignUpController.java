@@ -1,11 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package mkma.signupsignin.ui;
 
 import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.net.Socket;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
@@ -25,10 +23,12 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
+import user_message.Message;
 import user_message.User;
 
 /**
+ * This class is the controller for the sign-up window. It contains methods that
+ * control it, like checks of the text fields or to define the buttons.
  *
  * @author Kerman Rodríguez
  */
@@ -51,6 +51,12 @@ public class SignUpController implements Initializable {
     @FXML
     private Button btnBack;
 
+    /**
+     * Method that runs when you click the sign-up button. It calls the
+     * validation method and if valid, it sends a message.
+     *
+     * @param event it is the clicking event of the button
+     */
     @FXML
     private void handleButtonSignUp(ActionEvent event) {
         boolean error = validate();
@@ -60,48 +66,87 @@ public class SignUpController implements Initializable {
             user.setPassword(txtPass.getText());
             user.setEmail(txtEmail.getText());
             user.setFullName(txtName.getText());
-            System.out.println("gg bro");
-        } else {
-            System.out.println("fallo :(");
+            Message message = new Message();
+            message.setUser(user);
+            message.setMessageType(2);
+
+            sendMessage(message);
         }
     }
 
+    /**
+     * Method that runs when you click the back button. It closes this window
+     * and opens the Sign-in window.
+     *
+     * @param event it is the clicking event of the button
+     * @throws IOException
+     */
     @FXML
     private void handleButtonBack(ActionEvent event) throws IOException {
+        //It gets the FXML of the sign-in window
         FXMLLoader loader = new FXMLLoader(getClass().getResource("../ui/SignIn.fxml"));
         Parent root = (Parent) loader.load();
-
+        //It creates a controller for the window and runs it
         SignInController controller = (loader.getController());
         controller.setStage(stage);
         controller.initStage(root);
     }
 
+    /**
+     * Method that runs when the windows is initialized.
+     *
+     * @param url
+     * @param rb
+     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
         btnSignUp.setDisable(true);
     }
 
+    /**
+     * Method to get the stage in order to use in in the window
+     *
+     * @return the stage needed
+     */
     public Stage getStage() {
         return stage;
     }
 
+    /**
+     * Method used to set the stage to the window
+     *
+     * @param stage the stage needed
+     */
     public void setStage(Stage stage) {
         this.stage = stage;
     }
 
+    /**
+     * Method that initializes the window. It sets its properties and shows it
+     *
+     * @param root
+     */
     public void initStage(Parent root) {
         Scene scene = new Scene(root, 691, 405);
         stage.setTitle("Sign-up");
         stage.setResizable(false);
         stage.setScene(scene);
+
+        //It calls the method that handles how the elements show up
         handleWindowShowing();
         stage.show();
     }
 
+    /**
+     * Method used to set various additions to the elements, like tooltip
+     * buttons, or addition of listeners.
+     */
     private void handleWindowShowing() {
+        //It disables the signup button
         btnSignUp.setDisable(true);
 
+        //It sets tooltips in the buttons and text fields, to tell the user about them
         btnSignUp.setTooltip(new Tooltip("Click to create an user "
                 + "with this credentials"));
         btnBack.setTooltip(new Tooltip("Click to go back "
@@ -113,6 +158,7 @@ public class SignUpController implements Initializable {
         txtEmail.setTooltip(new Tooltip("Valid format e-mail"));
         txtName.setTooltip(new Tooltip("Write your name and surname"));
 
+        //It sets listeners to the text fields with a method that checks if they are empty
         txtUser.textProperty().addListener(this::textChanged);
         txtPass.textProperty().addListener(this::textChanged);
         txtPassAgain.textProperty().addListener(this::textChanged);
@@ -120,39 +166,48 @@ public class SignUpController implements Initializable {
         txtName.textProperty().addListener(this::textChanged);
     }
 
+    /**
+     * Method that validates the fields and returns a boolean. It runs various
+     * checks on each and every field, and if they are all valid it returns a
+     * true boolean.
+     *
+     * @return a boolean that tells if the fields have any errors.
+     */
     private boolean validate() {
+        //Creation of variables
         boolean error = false;
         String alertList = "";
-
+        //Checks if the user is long enough
         if (txtUser.getText().length() < 5) {
             error = true;
             alertList = alertList.concat("The username is too short.\n");
         }
-
+        //Checks if the user is too long
         if (txtUser.getText().length() > 20) {
             error = true;
             alertList = alertList.concat("The username is too long.\n");
         }
-
+        //Checks if the password meets the requirements
         if (isValidPass(txtPass.getText()) == false) {
             error = true;
             alertList = alertList.concat("The password needs to contain at least an upper-case, lower-case and a number.\n");
         }
-
+        //Checks if the password is too short
         if (txtPass.getText().length() < 5) {
             error = true;
             alertList = alertList.concat("The password is too short.\n");
         }
-
+        //Checks if the password and its confirmation are the same
         if (!txtPass.getText().equals(txtPassAgain.getText())) {
             error = true;
             alertList = alertList.concat("The passwords don´t match.\n");
         }
-
+        //Checks if the email has a valid format
         if (!isValidEmail(txtEmail.getText())) {
             error = true;
             alertList = alertList.concat("The email format is not valid.\n");
         }
+        //Shows an alert with any errors there might have been
         if (error) {
             Alert listAllAlerts = new Alert(AlertType.ERROR,
                     alertList, ButtonType.OK);
@@ -162,18 +217,27 @@ public class SignUpController implements Initializable {
         return error;
     }
 
+    /**
+     * This method receives a password and checks if it meets the requirements.
+     *
+     * @param s the password to check
+     * @return a boolean telling if the password is valid
+     */
     public static boolean isValidPass(String s) {
         boolean valid = true;
+        //Checks if it has any numbers
         Pattern pNumber = Pattern.compile("[0-9]");
         Matcher m = pNumber.matcher(s);
         if (!m.find()) {
             valid = false;
         }
+        //Checks if there are any upper-case letters
         Pattern pUpper = Pattern.compile("[A-Z]");
         m = pUpper.matcher(s);
         if (!m.find()) {
             valid = false;
         }
+        //Checks if there are any lower-case letters
         Pattern pLower = Pattern.compile("[a-z]");
         m = pLower.matcher(s);
         if (!m.find()) {
@@ -182,11 +246,25 @@ public class SignUpController implements Initializable {
         return valid;
     }
 
+    /**
+     * This method receives an email and checks if it is valid using a Regular
+     * Expression
+     *
+     * @param email the email to check
+     * @return a boolean telling if the email is valid
+     */
     static boolean isValidEmail(String email) {
         String regex = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
         return email.matches(regex);
     }
 
+    /**
+     * This method observes any changes in the text fields and disables the
+     * button if any are empty.
+     *
+     * @param observable it tells the method that the fields assigned need to be
+     * observed
+     */
     private void textChanged(Observable observable) {
         if (txtUser.getText().trim().equals("") || txtPass.getText().trim().equals("")
                 || txtPassAgain.getText().trim().equals("") || txtEmail.getText().trim().equals("")
@@ -194,6 +272,43 @@ public class SignUpController implements Initializable {
             btnSignUp.setDisable(true);
         } else {
             btnSignUp.setDisable(false);
+        }
+    }
+
+    /**
+     * This method creates a socket that will send a Message object to the
+     * server application.
+     *
+     * @param message the message with the user and the message type
+     */
+    private void sendMessage(Message message) {
+        Socket socket = null;
+        OutputStream outputStream = null;
+        ObjectOutputStream objectOutputStream = null;
+
+        try {
+            socket = new Socket("localhost", 6302);
+            outputStream = socket.getOutputStream();
+            objectOutputStream = new ObjectOutputStream(outputStream);
+            objectOutputStream.writeObject(message);
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        } finally {
+            try {
+                objectOutputStream.close();
+            } catch (IOException ex) {
+                System.out.println(ex.getMessage());
+            }
+            try {
+                outputStream.close();
+            } catch (IOException ex) {
+                System.out.println(ex.getMessage());
+            }
+            try {
+                socket.close();
+            } catch (IOException ex) {
+                System.out.println(ex.getMessage());
+            }
         }
     }
 
