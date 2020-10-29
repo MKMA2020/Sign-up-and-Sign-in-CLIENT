@@ -17,6 +17,7 @@ import java.io.OutputStream;
 import java.net.Socket;
 import signable.Signable;
 import user_message.Message;
+import user_message.MessageType;
 import user_message.User;
 
 /**
@@ -40,9 +41,7 @@ public class SignableImplementation implements Signable{
     @Override
     public User signIn(User user) throws DataBaseConnectionException, PassNotCorrectException, ServerErrorException, TimeOutException, UserNotFoundException {
         //Creates the message
-        Message message = new Message();
-        message.setUser(user);
-        message.setMessageType(1);
+        Message message = new Message(user, MessageType.SIGNIN);
         
         //Creates the socket and the output stream
         Socket socket = null;
@@ -90,10 +89,8 @@ public class SignableImplementation implements Signable{
     @Override
     public User signUp(User user) throws DataBaseConnectionException, ServerErrorException, TimeOutException, UserExistsException {
         //Creates the message
-        Message message = new Message();
-        message.setUser(user);
-        message.setMessageType(1);
-        
+        Message message = new Message(user, MessageType.SIGNUP);
+
         //Creates the socket and the output stream
         Socket socket = null;
         OutputStream outputStream = null;

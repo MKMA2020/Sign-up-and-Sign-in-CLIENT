@@ -4,6 +4,7 @@ import exceptions.DataBaseConnectionException;
 import exceptions.PassNotCorrectException;
 import exceptions.ServerErrorException;
 import exceptions.TimeOutException;
+import exceptions.UserExistsException;
 import exceptions.UserNotFoundException;
 import java.io.IOException;
 import java.net.URL;
@@ -61,7 +62,7 @@ public class SignUpController implements Initializable {
      * @param event it is the clicking event of the button
      */
     @FXML
-    private void handleButtonSignUp(ActionEvent event) throws DataBaseConnectionException, PassNotCorrectException, ServerErrorException, TimeOutException, UserNotFoundException {
+    private void handleButtonSignUp(ActionEvent event) throws DataBaseConnectionException, PassNotCorrectException, ServerErrorException, TimeOutException, UserNotFoundException, UserExistsException {
         boolean error = validate();
         if (!error) {
             User user = new User();
@@ -71,7 +72,7 @@ public class SignUpController implements Initializable {
             user.setFullName(txtName.getText());   
             SignableFactory factory = new SignableFactory();
             Signable signable = factory.getSignable();
-            signable.signIn(user);
+            signable.signUp(user);
         }
     }
 
