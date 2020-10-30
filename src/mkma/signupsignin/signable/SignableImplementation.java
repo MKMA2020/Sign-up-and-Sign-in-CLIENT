@@ -43,37 +43,10 @@ public class SignableImplementation implements Signable{
         //Creates the message
         Message message = new Message(user, MessageType.SIGNIN);
         
-        //Creates the socket and the output stream
-        Socket socket = null;
-        OutputStream outputStream = null;
-        ObjectOutputStream objectOutputStream = null;
+        //Creates the thread
+         Worker thread = new Worker(message);
+         new Thread(thread).start();
         
-        //Defines the object and the stream, and sends a message
-        try {
-            socket = new Socket("localhost", 6302);
-            outputStream = socket.getOutputStream();
-            objectOutputStream = new ObjectOutputStream(outputStream);
-            objectOutputStream.writeObject(message);
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-            //Closes the socket and the stream
-        } finally {
-            try {
-                objectOutputStream.close();
-            } catch (IOException ex) {
-                System.out.println(ex.getMessage());
-            }
-            try {
-                outputStream.close();
-            } catch (IOException ex) {
-                System.out.println(ex.getMessage());
-            }
-            try {
-                socket.close();
-            } catch (IOException ex) {
-                System.out.println(ex.getMessage());
-            }
-        }
         return user;
     }
     /**

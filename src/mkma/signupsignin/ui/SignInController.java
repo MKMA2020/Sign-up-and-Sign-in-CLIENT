@@ -50,25 +50,24 @@ public class SignInController implements Initializable {
     private Button btnSignUp;
 
     @FXML
-    private void handleButtonSignIn(ActionEvent event) throws UserNotFoundException, TimeOutException, PassNotCorrectException, DataBaseConnectionException, ServerErrorException {
+    private void handleButtonSignIn(ActionEvent event) throws UserNotFoundException, TimeOutException, PassNotCorrectException, DataBaseConnectionException, ServerErrorException, IOException {
         
         boolean error = false;
         
-        if (this.txtUser.getText().trim().equals("")) {
-            Alert alertEmpty = new Alert(Alert.AlertType.ERROR, "User and password fields"
-                    + " are empty", ButtonType.OK);
-            alertEmpty.showAndWait();
-            error = true;
-        }
         if (this.txtUser.getText().trim().length()<5){
             Alert alertShortUser = new Alert(Alert.AlertType.ERROR, "Username is"
                     + " too short", ButtonType.OK);
+            Button okButton = (Button) alertShortUser.getDialogPane().lookupButton(ButtonType.OK);
+            okButton.setId("btnOkS");
             alertShortUser.showAndWait();
             error = true;     
         }
         if (this.txtUser.getText().trim().length()>20){
             Alert alertlongUser = new Alert(Alert.AlertType.ERROR, "Username is"
                     + " too long", ButtonType.OK);
+            Button okButton = (Button) alertlongUser.getDialogPane().lookupButton(ButtonType.OK);
+            okButton.setId("btnOkL");
+
             alertlongUser.showAndWait();
             error = true;
         }
@@ -78,7 +77,8 @@ public class SignInController implements Initializable {
             user.setPassword(txtPass.getText());
             SignableFactory factory = new SignableFactory();
             Signable signable = factory.getSignable();
-            signable.signIn(user);
+            user=signable.signIn(user);
+            openWindow(stage);
         } 
             
     }
@@ -140,6 +140,14 @@ public class SignInController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         btnSignIn.setDisable(true);
         
+    }
+    private void openWindow(Stage primaryStage) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("../ui/SignOut.fxml"));
+        Parent root = (Parent) loader.load();
+
+        LogOutController controller = (loader.getController());
+        controller.setStage(primaryStage);
+        controller.initStage(root);
     }
     }
 
