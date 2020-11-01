@@ -5,19 +5,42 @@
  */
 package mkma.signupsignin.ui;
 
+import java.util.concurrent.TimeoutException;
+import javafx.stage.Stage;
+import mkma.signupsignin.application.App;
+import org.junit.BeforeClass;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.runners.MethodSorters;
+import static org.testfx.api.FxAssert.verifyThat;
+import org.testfx.api.FxToolkit;
+import org.testfx.framework.junit.ApplicationTest;
+import static org.testfx.matcher.base.NodeMatchers.isDisabled;
+import static org.testfx.matcher.base.NodeMatchers.isEnabled;
+import static org.testfx.matcher.control.TextInputControlMatchers.hasText;
 
 /**
  * TestFX test class for SignUpController.
+ *
  * @author 2dam
  */
-public class SignUpControllerTest {
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+public class SignUpControllerTest extends ApplicationTest {
+
+    @Override
+    public void start(Stage stage) throws Exception {
+        new App().start(stage);
+    }
+
+    @Override
+    public void stop() {
+    }
 
     @Test
-    public void testSomeMethod() {
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+    public void UserTooShortTest() {
+        clickOn("#txtUser");
+        write("username");
+
     }
-    
+
 }
