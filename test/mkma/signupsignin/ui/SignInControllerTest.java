@@ -20,6 +20,7 @@ import static org.testfx.matcher.base.NodeMatchers.anything;
 import static org.testfx.matcher.base.NodeMatchers.isDisabled;
 import static org.testfx.matcher.base.NodeMatchers.isEnabled;
 import static org.testfx.matcher.base.NodeMatchers.isVisible;
+import org.testfx.matcher.base.WindowMatchers;
 import static org.testfx.matcher.control.TextInputControlMatchers.hasText;
 
 
@@ -51,7 +52,7 @@ public class SignInControllerTest extends ApplicationTest{
         verifyThat("#btnSignIn", isDisabled());
     }
     
-    @Test
+   /* @Test
     public void TestB_signInDisabled(){
         clickOn("#txtUser");
         write("ratherlongusername");
@@ -114,15 +115,16 @@ public class SignInControllerTest extends ApplicationTest{
         write("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
         clickOn("#btnSignIn");
         
-   }
+   }*/
    
-   /*@Test
-    public void TestH_signInEnabled(){
+   @Test
+    public void TestH_SigningIn(){
         //TODO Comprobar que cambia de ventana al introducir información correcta
         clickOn("#txtUser");
-        write("validusername");
+        write("username");
         clickOn("#txtPass");
-        write("alsovalidpassword");
-        //verifyThat(referencia a ventana logouy, existe);
-    }*/
+        write("Password1");
+        clickOn("#btnSignIn");
+        verifyThat(window("#stage"), WindowMatchers.isShowing());
+    }
 }

@@ -23,41 +23,46 @@ import user_message.User;
 /**
  * This class contains the sign-up, sign-in and sign-out methods implemented
  * from the signable interface.
+ *
  * @author Kerman Rodríguez, Martin Gros and Aitor García
  */
-public class SignableImplementation implements Signable{
+public class SignableImplementation implements Signable {
+
     /**
-     * This method creates a message with the user and sends it 
-     * to the server in order to check if the user exists, and 
-     * log them in.
+     * This method creates a message with the user and sends it to the server in
+     * order to check if the user exists, and log them in.
+     *
      * @param user the user that needs a sign-in
-     * @return the user to check if the method was successful 
+     * @return the user to check if the method was successful
      * @throws DataBaseConnectionException
      * @throws PassNotCorrectException
      * @throws ServerErrorException
      * @throws TimeOutException
-     * @throws UserNotFoundException 
+     * @throws UserNotFoundException
      */
     @Override
     public User signIn(User user) throws DataBaseConnectionException, PassNotCorrectException, ServerErrorException, TimeOutException, UserNotFoundException {
         //Creates the message
         Message message = new Message(user, MessageType.SIGNIN);
-        
+
         //Creates the thread
-         Worker thread = new Worker(message);
-         new Thread(thread).start();
-        
+        Worker thread = new Worker(message);
+        new Thread(thread).start();
+        Message received = thread.getMessage();
+
         return user;
     }
+
     /**
-     * This method creates a message with the user and sends it
-     * to the server, in order to add him to the database.
+     * This method creates a message with the user and sends it to the server,
+     * in order to add him to the database.
+     *
      * @param user the user that needs a sign-up
-     * @return the user to check if the method was successful 
+     * @return the user to check if the method was successful
      * @throws DataBaseConnectionException
      * @throws ServerErrorException
      * @throws TimeOutException
-     * @throws UserExistsException 
+     * @throws UserExistsException
      */
     @Override
     public User signUp(User user) throws DataBaseConnectionException, ServerErrorException, TimeOutException, UserExistsException {
@@ -68,7 +73,7 @@ public class SignableImplementation implements Signable{
         Socket socket = null;
         OutputStream outputStream = null;
         ObjectOutputStream objectOutputStream = null;
-        
+
         //Defines the object and the stream, and sends a message
         try {
             socket = new Socket("localhost", 6302);
@@ -97,16 +102,18 @@ public class SignableImplementation implements Signable{
         }
         return user;
     }
+
     /**
      * This method opens a new windows and greets the user that has logged in.
+     *
      * @param user the user that needs a sign-out
-     * @return the user to check if the method was successful 
+     * @return the user to check if the method was successful
      */
     @Override
     public User signOut(User user) {
-        
+
         return user;
-        
+
     }
-   
+
 }

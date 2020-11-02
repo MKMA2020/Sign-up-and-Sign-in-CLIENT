@@ -73,6 +73,8 @@ public class SignUpController implements Initializable {
             SignableFactory factory = new SignableFactory();
             Signable signable = factory.getSignable();
             signable.signUp(user);
+            btnSignUp.setText("Registrado");
+            btnSignUp.setDisable(true);
         }
     }
 
