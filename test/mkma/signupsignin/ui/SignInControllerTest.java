@@ -6,8 +6,10 @@
 package mkma.signupsignin.ui;
 
 import java.util.concurrent.TimeoutException;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
 import mkma.signupsignin.application.App;
+import org.hamcrest.Matchers;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -20,6 +22,7 @@ import static org.testfx.matcher.base.NodeMatchers.anything;
 import static org.testfx.matcher.base.NodeMatchers.isDisabled;
 import static org.testfx.matcher.base.NodeMatchers.isEnabled;
 import static org.testfx.matcher.base.NodeMatchers.isVisible;
+import org.testfx.matcher.base.WindowMatchers;
 import static org.testfx.matcher.control.TextInputControlMatchers.hasText;
 
 
@@ -116,13 +119,13 @@ public class SignInControllerTest extends ApplicationTest{
         
    }
    
-   /*@Test
-    public void TestH_signInEnabled(){
-        //TODO Comprobar que cambia de ventana al introducir información correcta
+   @Test
+    public void TestH_SigningIn(){
         clickOn("#txtUser");
         write("validusername");
         clickOn("#txtPass");
         write("alsovalidpassword");
-        //verifyThat(referencia a ventana logouy, existe);
-    }*/
+        clickOn("#btnSignIn");
+        verifyThat("#windowSignOut", isVisible());
+    }
 }
