@@ -19,19 +19,19 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
+
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.PasswordField;
+
 import javafx.scene.control.TextField;
-import javafx.scene.control.Tooltip;
+import javafx.scene.text.Text;
+
 import javafx.stage.Stage;
-import mkma.signupsignin.signable.SignableFactory;
-import signable.Signable;
 import user_message.User;
+
 /**
- *
- * @author 2dam
+ *Class for the logout controller and its methods. IF the user gets here a greeting
+ * wull be shown with his name on int
+ * @author Martin Gros
  */
 public class LogOutController implements Initializable{
 
@@ -39,10 +39,14 @@ public class LogOutController implements Initializable{
     @FXML
     private Stage stage;
     @FXML
-    private Button btnCerrar;
+    private Button btnClose;
     @FXML
-    private TextField txtVent;
+    private Text txtWindow;
     @FXML
+    /**
+     * Whenever the user hits the back button it will send him back to the log in window.
+     */
+    
     private void handleButtonBack(ActionEvent event) throws IOException {
         //It gets the FXML of the sign-in window
         FXMLLoader loader = new FXMLLoader(getClass().getResource("../ui/SignIn.fxml"));
@@ -62,6 +66,10 @@ public class LogOutController implements Initializable{
     public void setStage(Stage stage) {
         this.stage = stage;
     }
+    /**
+     * Initializes and launches the window.
+     * @param root 
+     */
     public void initStage(Parent root) {
         Scene scene = new Scene(root);
         stage.setScene(scene);
@@ -73,7 +81,11 @@ public class LogOutController implements Initializable{
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+    }
+    
+    public void setUsername (User user) {
+        txtWindow.setText("Hello, "+user.getLogin());
     }
     
     
