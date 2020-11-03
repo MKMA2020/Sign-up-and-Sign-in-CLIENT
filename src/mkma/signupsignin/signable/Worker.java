@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 import user_message.Message;
 
 /**
- *
+ * Worker class from the client side
  * @author 2dam
  */
 public class Worker extends Thread {
@@ -29,7 +29,7 @@ public class Worker extends Thread {
     }
 
     @Override
-    public void run() {
+    public synchronized void run() {
         //Creates the socket and the output stream
         Socket socket = null;
         OutputStream outputStream = null;
@@ -79,6 +79,10 @@ public class Worker extends Thread {
             }
         }
     }
+    /**
+     * Method that sends the message back to the implementation
+     * @return Message
+     */
 
     public Message getMessage() {
         return received;
