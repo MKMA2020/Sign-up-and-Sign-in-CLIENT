@@ -11,10 +11,8 @@ import exceptions.ServerErrorException;
 import exceptions.TimeOutException;
 import exceptions.UserExistsException;
 import exceptions.UserNotFoundException;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
-import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import signable.Signable;
 import user_message.Message;
 import user_message.MessageType;
@@ -42,14 +40,38 @@ public class SignableImplementation implements Signable {
      */
     @Override
     public User signIn(User user) throws DataBaseConnectionException, PassNotCorrectException, ServerErrorException, TimeOutException, UserNotFoundException {
-        //Creates the message
-        Message message = new Message(user, MessageType.SIGNIN);
-
-        //Creates the thread
-        Worker thread = new Worker(message);
-        new Thread(thread).start();
-        Message received = thread.getMessage();
-
+        try {
+            //Creates the message
+            Message message = new Message(user, MessageType.SIGNIN);
+            
+            //Creates the thread
+            Worker worker = new Worker(message);
+            worker.start();
+            worker.join();
+           
+            Message received = worker.getMessage();
+            
+            switch (received.getMessageType()) {
+                
+                case DATABASEERROR :
+                    throw new DataBaseConnectionException();
+                case PASSNOTCORRECT :
+                    throw new PassNotCorrectException();
+                case SERVERERROR :
+                    throw new ServerErrorException();
+                case TIMEOUTEXCEPTION :
+                    throw new TimeOutException();
+                case USERNOTFOUND :
+                    throw new UserNotFoundException();
+                default :
+                    break;
+            }
+            
+            
+        } catch (InterruptedException ex) {
+            Logger.getLogger(SignableImplementation.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         return user;
     }
 
@@ -66,39 +88,33 @@ public class SignableImplementation implements Signable {
      */
     @Override
     public User signUp(User user) throws DataBaseConnectionException, ServerErrorException, TimeOutException, UserExistsException {
-        //Creates the message
-        Message message = new Message(user, MessageType.SIGNUP);
-
-        //Creates the socket and the output stream
-        Socket socket = null;
-        OutputStream outputStream = null;
-        ObjectOutputStream objectOutputStream = null;
-
-        //Defines the object and the stream, and sends a message
         try {
-            socket = new Socket("localhost", 6302);
-            outputStream = socket.getOutputStream();
-            objectOutputStream = new ObjectOutputStream(outputStream);
-            objectOutputStream.writeObject(message);
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-            //Closes the socket and the stream
-        } finally {
-            try {
-                objectOutputStream.close();
-            } catch (IOException ex) {
-                System.out.println(ex.getMessage());
+            //Creates the message
+            Message message = new Message(user, MessageType.SIGNUP);
+            
+            //Creates the thread
+            Worker worker = new Worker(message);
+            worker.start();
+            worker.join();
+            Message received = worker.getMessage();
+            
+            switch (received.getMessageType()) {
+                
+                case DATABASEERROR :
+                    throw new DataBaseConnectionException();
+                case SERVERERROR :
+                    throw new ServerErrorException();
+                case TIMEOUTEXCEPTION :
+                    throw new TimeOutException();
+                case USEREXISTS :
+                    throw new UserExistsException();
+                default :
+                    break;
             }
-            try {
-                outputStream.close();
-            } catch (IOException ex) {
-                System.out.println(ex.getMessage());
-            }
-            try {
-                socket.close();
-            } catch (IOException ex) {
-                System.out.println(ex.getMessage());
-            }
+            
+            
+        } catch (InterruptedException ex) {
+            Logger.getLogger(SignableImplementation.class.getName()).log(Level.SEVERE, null, ex);
         }
         return user;
     }

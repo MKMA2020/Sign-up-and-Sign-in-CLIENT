@@ -68,6 +68,8 @@ public class SignInController implements Initializable {
     private void handleButtonSignIn(ActionEvent event) throws UserNotFoundException, TimeOutException, PassNotCorrectException, DataBaseConnectionException, ServerErrorException, IOException {
         
         boolean error = false;
+        String alertError = null;
+        boolean alertNeeded = false;
         
         if (this.txtUser.getText().trim().length()<5){
             Alert alertShortUser = new Alert(Alert.AlertType.ERROR, "Username is"
@@ -92,8 +94,23 @@ public class SignInController implements Initializable {
             user.setPassword(txtPass.getText());
             SignableFactory factory = new SignableFactory();
             Signable signable = factory.getSignable();
-            user=signable.signIn(user);
-            openWindow(stage, user);
+            try {
+                user=signable.signIn(user);
+                openWindow(stage, user);
+            } catch (UserNotFoundException | PassNotCorrectException ex){
+                alertNeeded = true;
+                alertError = "User or password are incorrect.";
+            }  catch (DataBaseConnectionException | ServerErrorException | TimeOutException ex) {
+                alertNeeded = true;
+                alertError = "An unexpected error ocurred on the server.";
+            }
+            
+            if (alertNeeded) {
+                Alert exceptionAlert = new Alert(Alert.AlertType.ERROR,
+                        alertError, ButtonType.OK);
+                exceptionAlert.showAndWait();
+            }
+            
         } 
             
     }

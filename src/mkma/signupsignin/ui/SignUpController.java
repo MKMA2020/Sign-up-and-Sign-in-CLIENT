@@ -64,17 +64,34 @@ public class SignUpController implements Initializable {
     @FXML
     private void handleButtonSignUp(ActionEvent event) throws DataBaseConnectionException, PassNotCorrectException, ServerErrorException, TimeOutException, UserNotFoundException, UserExistsException {
         boolean error = validate();
+        String alertError = null;
+        boolean alertNeeded = false;
         if (!error) {
             User user = new User();
             user.setLogin(txtUser.getText());
             user.setPassword(txtPass.getText());
             user.setEmail(txtEmail.getText());
-            user.setFullName(txtName.getText());   
+            user.setFullName(txtName.getText());
             SignableFactory factory = new SignableFactory();
             Signable signable = factory.getSignable();
-            signable.signUp(user);
-            btnSignUp.setText("Registrado");
-            btnSignUp.setDisable(true);
+            try {
+                User received = signable.signUp(user);
+                btnSignUp.setText("Registrado");
+                btnSignUp.setDisable(true);
+            } catch (DataBaseConnectionException | ServerErrorException | TimeOutException ex) {
+                alertNeeded = true;
+                alertError = "An unexpected error ocurred on the server.";
+            } catch (UserExistsException ex) {
+                alertNeeded = true;
+                alertError = "The user you are trying to create already exists.";
+            }
+
+            if (alertNeeded) {
+                Alert exceptionAlert = new Alert(AlertType.ERROR,
+                        alertError, ButtonType.OK);
+                exceptionAlert.showAndWait();
+            }
+
         }
     }
 

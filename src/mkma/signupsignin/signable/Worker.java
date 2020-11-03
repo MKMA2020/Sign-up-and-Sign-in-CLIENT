@@ -19,15 +19,15 @@ import user_message.Message;
  *
  * @author 2dam
  */
-public class Worker extends Thread{
-    
+public class Worker extends Thread {
+
     private Message message;
     private Message received;
 
     public Worker(Message message) {
         this.message = message;
     }
-    
+
     @Override
     public void run() {
         //Creates the socket and the output stream
@@ -36,7 +36,7 @@ public class Worker extends Thread{
         ObjectOutputStream objectOutputStream = null;
         ObjectInputStream entry = null;
         InputStream input = null;
-        
+
         //Defines the object and the stream, and sends a message
         try {
             socket = new Socket("localhost", 6302);
@@ -49,17 +49,15 @@ public class Worker extends Thread{
         } catch (IOException e) {
             System.out.println(e.getMessage());
             //Closes the socket and the stream
-        } catch (ClassNotFoundException ex) { 
+        } catch (ClassNotFoundException ex) {
             Logger.getLogger(Worker.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        finally{
-             try {
+        } finally {
+            try {
                 entry.close();
             } catch (IOException ex) {
                 System.out.println(ex.getMessage());
             }
-             try {
+            try {
                 input.close();
             } catch (IOException ex) {
                 System.out.println(ex.getMessage());
