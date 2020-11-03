@@ -6,8 +6,10 @@
 package mkma.signupsignin.ui;
 
 import java.util.concurrent.TimeoutException;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
 import mkma.signupsignin.application.App;
+import org.hamcrest.Matchers;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -119,12 +121,11 @@ public class SignInControllerTest extends ApplicationTest{
    
    @Test
     public void TestH_SigningIn(){
-        //TODO Comprobar que cambia de ventana al introducir información correcta
         clickOn("#txtUser");
         write("username");
         clickOn("#txtPass");
-        write("Password1");
+        write("alsovalidpassword");
         clickOn("#btnSignIn");
-        verifyThat(window("#stage"), WindowMatchers.isShowing());
+        verifyThat("#windowSignOut", isVisible());
     }
 }
