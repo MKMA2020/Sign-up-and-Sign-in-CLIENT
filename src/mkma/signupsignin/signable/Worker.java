@@ -11,6 +11,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import user_message.Message;
@@ -36,10 +37,13 @@ public class Worker extends Thread {
         ObjectOutputStream objectOutputStream = null;
         ObjectInputStream entry = null;
         InputStream input = null;
+        ResourceBundle configFile;
+        configFile = ResourceBundle.getBundle("mkma.signupsignin.signable.config");
+        
 
         //Defines the object and the stream, and sends a message
         try {
-            socket = new Socket("localhost", 6302);
+            socket = new Socket(configFile.getString("URL"), Integer.parseInt(configFile.getString("PORT")));
             outputStream = socket.getOutputStream();
             objectOutputStream = new ObjectOutputStream(outputStream);
             objectOutputStream.writeObject(message);
