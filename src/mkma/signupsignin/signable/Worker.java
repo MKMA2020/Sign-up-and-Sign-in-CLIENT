@@ -29,7 +29,7 @@ public class Worker extends Thread {
     }
 
     @Override
-    public void run() {
+    public synchronized void run() {
         //Creates the socket and the output stream
         Socket socket = null;
         OutputStream outputStream = null;
