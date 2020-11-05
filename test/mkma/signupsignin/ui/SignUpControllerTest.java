@@ -86,7 +86,7 @@ public class SignUpControllerTest extends ApplicationTest {
         clickOn("#txtPassAgain");
         write("Alberto!Garcia8");
         clickOn("#txtEmail");
-        write("albertogarica@gmail.com");
+        write("albertogarcia@gmail.com");
         clickOn("#txtName");
         write("Alberto García");
         clickOn("#btnSignUp");

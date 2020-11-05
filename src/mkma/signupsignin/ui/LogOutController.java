@@ -5,32 +5,23 @@
  */
 package mkma.signupsignin.ui;
 
-import exceptions.PassNotCorrectException;
-import exceptions.ServerErrorException;
-import exceptions.TimeOutException;
-import exceptions.UserNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.beans.Observable;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-
 import javafx.scene.control.Button;
-
-import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
-
 import javafx.stage.Stage;
 import user_message.User;
 
 /**
- *Class for the logout controller and its methods. IF the user gets here a greeting
- * wull be shown with his name on int
+ * Class for the logout controller and its methods. If the user gets here a greeting
+ * will be shown with his name on it.
  * @author Martin Gros
  */
 public class LogOutController implements Initializable{
@@ -83,9 +74,12 @@ public class LogOutController implements Initializable{
     public void initialize(URL location, ResourceBundle resources) {
         
     }
-    
+    /**
+     * This method changes the text in the window to show the user's name.
+     * @param user the user that logged in
+     */
     public void setUsername (User user) {
-        txtWindow.setText("Hello, "+user.getLogin());
+        txtWindow.setText("Hello, "+user.getFullName());
     }
     
     

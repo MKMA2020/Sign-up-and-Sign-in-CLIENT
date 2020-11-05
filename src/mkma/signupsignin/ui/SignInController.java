@@ -115,7 +115,7 @@ public class SignInController implements Initializable {
             
     }
     /**
-     * IF the button it's clicked the sign up window'll be launched.
+     * If the button is clicked the sign up window will be launched.
      * @param event
      * @throws IOException 
      */
@@ -135,7 +135,7 @@ public class SignInController implements Initializable {
         this.stage = stage;
     }
     /**
-     * Initializes and srarts the window.
+     * Initializes and starts the window.
      * @param root 
      */
 
@@ -162,9 +162,9 @@ public class SignInController implements Initializable {
 
     }
     /**
-     * This method's always looking wether the user's typing in both fields in ordeer to
-     * enable or deisbale the log in button.
-     * @param obv 
+     * This method's always looking whether the user's typing in both fields in order to
+     * enable or disable the log in button.
+     * @param obv parameter used to observe the text fields.
      */
 
     private void textchanged(Observable obv) {

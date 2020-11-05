@@ -54,7 +54,7 @@ public class SignInControllerTest extends ApplicationTest{
         verifyThat("#btnSignIn", isDisabled());
     }
     
-   /* @Test
+   @Test
     public void TestB_signInDisabled(){
         clickOn("#txtUser");
         write("ratherlongusername");
