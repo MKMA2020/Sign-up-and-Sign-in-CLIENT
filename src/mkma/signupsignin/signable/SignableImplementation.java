@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package mkma.signupsignin.signable;
 
 import exceptions.DataBaseConnectionException;
@@ -40,39 +35,39 @@ public class SignableImplementation implements Signable {
      */
     @Override
     public User signIn(User user) throws DataBaseConnectionException, PassNotCorrectException, ServerErrorException, TimeOutException, UserNotFoundException {
+        Message received = new Message(null, null);
         try {
             //Creates the message
             Message message = new Message(user, MessageType.SIGNIN);
-            
+
             //Creates the thread
             Worker worker = new Worker(message);
             worker.start();
             worker.join();
-           
-            Message received = worker.getMessage();
-            
+
+            received = worker.getReceived();
+
             switch (received.getMessageType()) {
-                
-                case DATABASEERROR :
+
+                case DATABASEERROR:
                     throw new DataBaseConnectionException();
-                case PASSNOTCORRECT :
+                case PASSNOTCORRECT:
                     throw new PassNotCorrectException();
-                case SERVERERROR :
+                case SERVERERROR:
                     throw new ServerErrorException();
-                case TIMEOUTEXCEPTION :
+                case TIMEOUTEXCEPTION:
                     throw new TimeOutException();
-                case USERNOTFOUND :
+                case USERNOTFOUND:
                     throw new UserNotFoundException();
-                default :
+                default:
                     break;
             }
-            
-            
+
         } catch (InterruptedException ex) {
             Logger.getLogger(SignableImplementation.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        return user;
+
+        return received.getUser();
     }
 
     /**
@@ -88,35 +83,35 @@ public class SignableImplementation implements Signable {
      */
     @Override
     public User signUp(User user) throws DataBaseConnectionException, ServerErrorException, TimeOutException, UserExistsException {
+        Message received = new Message(null, null);
         try {
             //Creates the message
             Message message = new Message(user, MessageType.SIGNUP);
-            
+
             //Creates the thread
             Worker worker = new Worker(message);
             worker.start();
             worker.join();
-            Message received = worker.getMessage();
-            
+            received = worker.getReceived();
+
             switch (received.getMessageType()) {
-                
-                case DATABASEERROR :
+
+                case DATABASEERROR:
                     throw new DataBaseConnectionException();
-                case SERVERERROR :
+                case SERVERERROR:
                     throw new ServerErrorException();
-                case TIMEOUTEXCEPTION :
+                case TIMEOUTEXCEPTION:
                     throw new TimeOutException();
-                case USEREXISTS :
+                case USEREXISTS:
                     throw new UserExistsException();
-                default :
+                default:
                     break;
             }
-            
-            
+
         } catch (InterruptedException ex) {
             Logger.getLogger(SignableImplementation.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return user;
+        return received.getUser();
     }
 
     /**

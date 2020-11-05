@@ -105,7 +105,7 @@ public class SignUpController implements Initializable {
     @FXML
     private void handleButtonBack(ActionEvent event) throws IOException {
         //It gets the FXML of the sign-in window
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("../ui/SignIn.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("SignIn.fxml"));
         Parent root = (Parent) loader.load();
         //It creates a controller for the window and runs it
         SignInController controller = (loader.getController());

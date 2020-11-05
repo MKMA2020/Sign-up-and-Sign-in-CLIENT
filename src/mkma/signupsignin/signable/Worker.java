@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package mkma.signupsignin.signable;
 
 import java.io.IOException;
@@ -17,19 +12,27 @@ import java.util.logging.Logger;
 import user_message.Message;
 
 /**
- * Worker class of the client. It creates a socket and sends the
- * message to the server.
+ * Worker class of the client. It creates a socket and sends the message to the
+ * server.
+ *
  * @author Kerman Rodríguez, Martín Gros
  */
 public class Worker extends Thread {
 
     private Message message;
     private Message received;
-
+    
+    /**
+     * Constructor that sets the Worker message.
+     * @param message message that is set.
+     */
     public Worker(Message message) {
         this.message = message;
     }
 
+    /**
+     * Method Thread method run.
+     */
     @Override
     public synchronized void run() {
         //Creates the socket and the output stream
@@ -83,11 +86,13 @@ public class Worker extends Thread {
             }
         }
     }
+
     /**
      * Method that sends the message back to the client who sent it.
+     *
      * @return the treated message
      */
-    public Message getMessage() {
+    public Message getReceived() {
         return received;
     }
 }

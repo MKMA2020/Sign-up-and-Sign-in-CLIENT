@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package mkma.signupsignin.ui;
 
 import exceptions.DataBaseConnectionException;
@@ -185,7 +180,7 @@ public class SignInController implements Initializable {
      */
 
     private void start_signup(Stage primaryStage) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("../ui/SignUp.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("SignUp.fxml"));
         Parent root = (Parent) loader.load();
 
         SignUpController controller = (loader.getController());
@@ -209,7 +204,7 @@ public class SignInController implements Initializable {
      * @throws IOException 
      */
     private void openWindow(Stage logOutStage, User user) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("../ui/SignOut.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("SignOut.fxml"));
         Parent root = (Parent) loader.load();
 
         LogOutController controller = (loader.getController());
