@@ -153,6 +153,11 @@ public class SignUpController implements Initializable {
         stage.setTitle("Sign-up");
         stage.setResizable(false);
         stage.setScene(scene);
+        txtUser.setText("");
+        txtPass.setText("");
+        txtPassAgain.setText("");
+        txtEmail.setText("");
+        txtName.setText("");
 
         //It calls the method that handles how the elements show up
         handleWindowShowing();

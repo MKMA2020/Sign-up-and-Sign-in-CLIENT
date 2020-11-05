@@ -144,6 +144,8 @@ public class SignInController implements Initializable {
         stage.setScene(scene);
         stage.setTitle("Sign In");
         stage.setResizable(false);
+        txtUser.setText("");
+        txtPass.setText("");
         handleWindowShowing();
         txtUser.textProperty().addListener((this::textchanged));
         txtPass.textProperty().addListener((this::textchanged));
