@@ -16,7 +16,6 @@ import static org.testfx.api.FxAssert.verifyThat;
 import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit.ApplicationTest;
 import static org.testfx.matcher.base.NodeMatchers.isVisible;
-import static org.testfx.matcher.control.TextInputControlMatchers.hasText;
 
 /**
  * TestFX test class for LogOutController.
@@ -40,6 +39,9 @@ public class LogOutControllerTest extends ApplicationTest{
         FxToolkit.setupApplication(App.class);
    }
     
+    /**
+     * Method that leads to the logout window and then checks whether it exists or not.
+     */
     @Test
     public void testA_initislstate() {
         clickOn("#txtUser");
@@ -50,6 +52,9 @@ public class LogOutControllerTest extends ApplicationTest{
         verifyThat("#windowSignOut", isVisible());
     }
     
+    /**
+     * Method that returns to the login window and checks whether it exists or not.
+     */
     @Test
     public void testB_goBack(){
         clickOn("#btnCerrar");
