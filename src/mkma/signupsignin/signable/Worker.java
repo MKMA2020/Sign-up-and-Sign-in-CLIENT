@@ -18,7 +18,7 @@ import user_message.Message;
 
 /**
  * Worker class from the client side
- * @author 2dam
+ * @author Kerman Rodriguez, Martin Gros
  */
 public class Worker extends Thread {
 

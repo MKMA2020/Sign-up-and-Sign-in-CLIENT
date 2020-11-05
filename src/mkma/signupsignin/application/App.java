@@ -13,10 +13,15 @@ import javafx.stage.Stage;
 import mkma.signupsignin.ui.*;
 
 /**
- *
- * @author 2dam
+ * Application from the client side, loads the stage and calls the controller which initializes it. 
+ * @author Kerman
  */
 public class App extends Application {
+    /**
+     * Loads the fxml file and calls the controller in order to initialize the stage.
+     * @param primaryStage
+     * @throws IOException 
+     */
     
     @Override
     public void start(Stage primaryStage) throws IOException {
