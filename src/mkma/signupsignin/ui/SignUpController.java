@@ -76,7 +76,7 @@ public class SignUpController implements Initializable {
             Signable signable = factory.getSignable();
             try {
                 User received = signable.signUp(user);
-                btnSignUp.setText("Registrado");
+                btnSignUp.setText("Signed Up");
                 btnSignUp.setDisable(true);
             } catch (DataBaseConnectionException | ServerErrorException | TimeOutException ex) {
                 alertNeeded = true;
