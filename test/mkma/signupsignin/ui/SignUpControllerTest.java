@@ -53,6 +53,7 @@ public class SignUpControllerTest extends ApplicationTest {
      * contain text. If there is at least one empty field SignUpButton should be
      * disabled.
      */
+    
     @Test
     public void testB_SignUpButtonEnabled() {
 
@@ -94,7 +95,7 @@ public class SignUpControllerTest extends ApplicationTest {
         clickOn("#txtName");
         write("Alberto García");
         clickOn("#btnSignUp");
-        verifyThat("#listAllAlerts", anything());
+        verifyThat("Error", isVisible());
         clickOn("Aceptar");
     }
 
@@ -115,7 +116,7 @@ public class SignUpControllerTest extends ApplicationTest {
         clickOn("#txtName");
         write("Alberto García");
         clickOn("#btnSignUp");
-        verifyThat("#listAllAlerts", anything());
+        verifyThat("Error", isVisible());
         clickOn("Aceptar");
     }
     
@@ -135,7 +136,7 @@ public class SignUpControllerTest extends ApplicationTest {
         clickOn("#txtName");
         write("Alberto García");
         clickOn("#btnSignUp");
-        verifyThat("#listAllAlerts",anything()); 
+        verifyThat("Error",isVisible()); 
         clickOn("Aceptar");
     }
     
@@ -155,7 +156,7 @@ public class SignUpControllerTest extends ApplicationTest {
         clickOn("#txtName");
         write("Alberto García");
         clickOn("#btnSignUp");
-        verifyThat("#listAllAlerts",anything()); 
+        verifyThat("Error",isVisible()); 
         clickOn("Aceptar");
     }
 
@@ -163,6 +164,7 @@ public class SignUpControllerTest extends ApplicationTest {
      * This method will verify that once pushed the button Sign Up changes to
      * Signed Up.
      */
+    
     @Test
     public void testG_SignUpButtonChanged() {
         clickOn("#txtUser");
@@ -176,7 +178,7 @@ public class SignUpControllerTest extends ApplicationTest {
         clickOn("#txtName");
         write("Alberto García");
         clickOn("#btnSignUp");
-        //verifyThat("#Signed Up", isDisabled());
+        verifyThat("#btnSignUp", isDisabled());
     }
 
     /**
