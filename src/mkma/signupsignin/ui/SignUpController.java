@@ -248,6 +248,8 @@ public class SignUpController{
         if (error) {
             Alert listAllAlerts = new Alert(AlertType.ERROR,
                     alertList, ButtonType.OK);
+            Button aceptar = (Button) listAllAlerts.getDialogPane().lookupButton(ButtonType.OK);
+            aceptar.setId("Aceptar");
             listAllAlerts.showAndWait();
         }
 
