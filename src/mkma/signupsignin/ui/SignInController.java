@@ -31,7 +31,7 @@ import user_message.User;
  * It has the methods needed to launch the other windows, plus send the data as well.
  * @author Martin Gros
  */
-public class SignInController implements Initializable {
+public class SignInController {
 
     @FXML
     private Stage stage;
@@ -187,20 +187,10 @@ public class SignInController implements Initializable {
         controller.setStage(primaryStage);
         controller.initStage(root);
     }
-    /**
-     * Whenever the window gets initialized by default it will set the button to disable.
-     * @param location
-     * @param resources 
-     */
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        btnSignIn.setDisable(true);
-        
-    }
     /**
      * Launches the main window
-     * @param primaryStage
+     * @param logOutStage
      * @throws IOException 
      */
     private void openWindow(Stage logOutStage, User user) throws IOException {

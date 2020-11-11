@@ -20,7 +20,7 @@ public class App extends Application {
      * stage.
      *
      * @param primaryStage the stage to set
-     * @throws IOException
+     * @throws IOException when there is an input/output error
      */
     @Override
     public void start(Stage primaryStage) throws IOException {

@@ -35,7 +35,7 @@ public class LogOutController implements Initializable {
      * in window.
      */
 
-    private void handleButtonBack(ActionEvent event) throws IOException {
+    private void handleButtonClose(ActionEvent event) throws IOException {
         //It gets the FXML of the sign-in window
         FXMLLoader loader = new FXMLLoader(getClass().getResource("SignIn.fxml"));
         Parent root = (Parent) loader.load();
@@ -56,7 +56,7 @@ public class LogOutController implements Initializable {
     /**
      * Initializes and launches the window.
      *
-     * @param root
+     * @param root the parent of the window
      */
     public void initStage(Parent root) {
         Scene scene = new Scene(root);

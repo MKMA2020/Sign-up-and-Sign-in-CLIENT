@@ -142,9 +142,9 @@ public class SignInControllerTest extends ApplicationTest{
    @Test
     public void TestH_SigningIn(){
         clickOn("#txtUser");
-        write("username");
+        write("kerman");
         clickOn("#txtPass");
-        write("alsovalidpassword");
+        write("1Aqwe");
         clickOn("#btnSignIn");
         verifyThat("#windowSignOut", isVisible());
     }

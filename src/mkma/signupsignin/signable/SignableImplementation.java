@@ -27,11 +27,12 @@ public class SignableImplementation implements Signable {
      *
      * @param user the user that needs a sign-in
      * @return the user to check if the method was successful
-     * @throws DataBaseConnectionException
-     * @throws PassNotCorrectException
-     * @throws ServerErrorException
-     * @throws TimeOutException
-     * @throws UserNotFoundException
+     * @throws DataBaseConnectionException when there is an error connecting to
+     * the database
+     * @throws PassNotCorrectException when the password is not correct
+     * @throws ServerErrorException when there is an error in the server
+     * @throws TimeOutException when the server times out
+     * @throws UserNotFoundException when the user does not exist
      */
     @Override
     public User signIn(User user) throws DataBaseConnectionException, PassNotCorrectException, ServerErrorException, TimeOutException, UserNotFoundException {
@@ -76,10 +77,11 @@ public class SignableImplementation implements Signable {
      *
      * @param user the user that needs a sign-up
      * @return the user to check if the method was successful
-     * @throws DataBaseConnectionException
-     * @throws ServerErrorException
-     * @throws TimeOutException
-     * @throws UserExistsException
+     * @throws DataBaseConnectionException when there is an error connecting to
+     * the database
+     * @throws ServerErrorException when there is an error in the server
+     * @throws TimeOutException when the server times out
+     * @throws UserExistsException when the user already exists
      */
     @Override
     public User signUp(User user) throws DataBaseConnectionException, ServerErrorException, TimeOutException, UserExistsException {

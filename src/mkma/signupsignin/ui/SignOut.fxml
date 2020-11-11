@@ -17,7 +17,7 @@
                   <Font size="20.0" />
                </font>
             </Text>
-            <Button fx:id="btnClose" layoutX="110.0" layoutY="203.0" mnemonicParsing="false" onAction="#handleButtonBack" prefHeight="25.0" prefWidth="89.0" style="-fx-background-color: #3f4988;" text="Sign out" textFill="#909090" />
+            <Button fx:id="btnClose" layoutX="110.0" layoutY="203.0" mnemonicParsing="false" onAction="#handleButtonClose" prefHeight="25.0" prefWidth="89.0" style="-fx-background-color: #3f4988;" text="Sign out" textFill="#909090" />
          </children>
       </AnchorPane>
       <ImageView fitHeight="150.0" fitWidth="200.0" layoutY="258.0" pickOnBounds="true" preserveRatio="true">
