@@ -9,6 +9,8 @@ import exceptions.UserNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javafx.beans.Observable;
@@ -67,6 +69,8 @@ public class SignUpController implements Initializable {
         String alertError = null;
         boolean alertNeeded = false;
         if (!error) {
+            final Logger LOG = Logger.getLogger("mkma.signupsignin.ui.SignInController.java");
+            LOG.log(Level.INFO, "Attempt to sign in");
             User user = new User();
             user.setLogin(txtUser.getText());
             user.setPassword(txtPass.getText());
@@ -76,6 +80,7 @@ public class SignUpController implements Initializable {
             Signable signable = factory.getSignable();
             try {
                 User received = signable.signUp(user);
+                LOG.log(Level.INFO, "Petition created by: "+user.getLogin());
                 btnSignUp.setText("Signed Up");
                 btnSignUp.setDisable(true);
             } catch (DataBaseConnectionException | ServerErrorException | TimeOutException ex) {

@@ -21,6 +21,7 @@ public class Worker extends Thread {
 
     private Message message;
     private Message received;
+    final Logger LOG = Logger.getLogger("mkma.signupsignin.signable.Worker.java");
     
     /**
      * Constructor that sets the Worker message.
@@ -46,6 +47,7 @@ public class Worker extends Thread {
 
         //Defines the object and the stream, and sends a message
         try {
+            LOG.log(Level.INFO, "Connection Opened");
             socket = new Socket(configFile.getString("URL"), Integer.parseInt(configFile.getString("PORT")));
             outputStream = socket.getOutputStream();
             objectOutputStream = new ObjectOutputStream(outputStream);
@@ -93,6 +95,7 @@ public class Worker extends Thread {
      * @return the treated message
      */
     public Message getReceived() {
+        LOG.log(Level.INFO, "Message received");
         return received;
     }
 }

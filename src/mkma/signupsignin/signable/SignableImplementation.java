@@ -38,6 +38,8 @@ public class SignableImplementation implements Signable {
         Message received = new Message(null, null);
         try {
             //Creates the message
+            final Logger LOG = Logger.getLogger("mkma.signupsignin.signable.SignableImplementation.java");
+            LOG.log(Level.INFO, "The message has been created");
             Message message = new Message(user, MessageType.SIGNIN);
 
             //Creates the thread
@@ -46,6 +48,11 @@ public class SignableImplementation implements Signable {
             worker.join();
 
             received = worker.getReceived();
+            if (received == null){
+                throw new TimeOutException();
+                
+            }
+            else{
 
             switch (received.getMessageType()) {
 
@@ -61,7 +68,7 @@ public class SignableImplementation implements Signable {
                     throw new UserNotFoundException();
                 default:
                     break;
-            }
+            }}
 
         } catch (InterruptedException ex) {
             Logger.getLogger(SignableImplementation.class.getName()).log(Level.SEVERE, null, ex);
