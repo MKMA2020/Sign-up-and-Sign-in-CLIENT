@@ -7,15 +7,12 @@ import exceptions.TimeOutException;
 import exceptions.UserExistsException;
 import exceptions.UserNotFoundException;
 import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javafx.beans.Observable;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -36,33 +33,58 @@ import user_message.User;
  *
  * @author Kerman Rodríguez
  */
-public class SignUpController implements Initializable {
 
+public class SignUpController{
+
+    /**
+     * The stage that is going to be shown
+     */
     @FXML
     private Stage stage;
+    /**
+     * Text field to enter the user
+     */
     @FXML
     private TextField txtUser;
+    /**
+     * Text field to enter the password
+     */
     @FXML
     private PasswordField txtPass;
+    /**
+     * Text field to repeat the password
+     */
     @FXML
     private PasswordField txtPassAgain;
+    /**
+     * Text field to enter the email
+     */
     @FXML
     private TextField txtEmail;
+    /**
+     * Text field to enter the name of the user
+     */
     @FXML
     private TextField txtName;
+    /**
+     * Button to sign in the user
+     */
     @FXML
     private Button btnSignUp;
+    /**
+     * Button to go back to the sign in window
+     */
     @FXML
     private Button btnBack;
 
     /**
      * Method that runs when you click the sign-up button. It calls the
      * validation method and if valid, it sends a user to the implementation.
-     *
+     * 
      * @param event it is the clicking event of the button
      */
     @FXML
-    private void handleButtonSignUp(ActionEvent event) throws DataBaseConnectionException, PassNotCorrectException, ServerErrorException, TimeOutException, UserNotFoundException, UserExistsException {
+    private void handleButtonSignUp(ActionEvent event) {
         boolean error = validate();
         String alertError = null;
         boolean alertNeeded = false;
@@ -100,7 +122,7 @@ public class SignUpController implements Initializable {
      * and opens the Sign-in window.
      *
      * @param event it is the clicking event of the button
-     * @throws IOException
+     * @throws IOException when there is an input/output error
      */
     @FXML
     private void handleButtonBack(ActionEvent event) throws IOException {
@@ -113,17 +135,6 @@ public class SignUpController implements Initializable {
         controller.initStage(root);
     }
 
-    /**
-     * Method that runs when the windows is initialized.
-     *
-     * @param url
-     * @param rb
-     */
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-        btnSignUp.setDisable(true);
-    }
 
     /**
      * Method to get the stage in order to use in in the window
@@ -146,7 +157,7 @@ public class SignUpController implements Initializable {
     /**
      * Method that initializes the window. It sets its properties and shows it
      *
-     * @param root
+     * @param root the parent of the window
      */
     public void initStage(Parent root) {
         Scene scene = new Scene(root, 691, 405);

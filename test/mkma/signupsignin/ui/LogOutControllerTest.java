@@ -28,7 +28,7 @@ public class LogOutControllerTest extends ApplicationTest{
     
     @Override
     public void start(Stage stage) throws Exception {
-        new App().start(stage);
+        new App().start(stage); 
     }
     
     @Override
@@ -43,16 +43,16 @@ public class LogOutControllerTest extends ApplicationTest{
     @Test
     public void testA_initislstate() {
         clickOn("#txtUser");
-        write("validusername");
+        write("kerman");
         clickOn("#txtPass");
-        write("alsovalidpassword");
+        write("1Aqwe");
         clickOn("#btnSignIn");
         verifyThat("#windowSignOut", isVisible());
     }
     
     @Test
     public void testB_goBack(){
-        clickOn("#btnCerrar");
+        clickOn("#btnClose");
         verifyThat("#windowSignIn", isVisible());
     }
     
