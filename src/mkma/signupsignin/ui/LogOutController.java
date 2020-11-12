@@ -43,6 +43,7 @@ public class LogOutController implements Initializable {
         SignInController controller = (loader.getController());
         controller.setStage(stage);
         controller.initStage(root);
+        
     }
 
     public Stage getStage() {

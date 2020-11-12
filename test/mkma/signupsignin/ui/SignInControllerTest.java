@@ -10,6 +10,7 @@ import javafx.stage.Stage;
 import mkma.signupsignin.application.App;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import static org.testfx.api.FxAssert.verifyThat;
@@ -37,17 +38,18 @@ public class SignInControllerTest extends ApplicationTest{
     @Override
     public void stop(){}
     
-    @BeforeClass
+    /*@BeforeClass
     public static void setUpClass() throws TimeoutException {
+        
         FxToolkit.registerPrimaryStage();
         FxToolkit.setupApplication(App.class);
    }
-    
+    */
     /**
      * Method that checks that the initial characteristics of the window are correct.
      */
     @Test
-    public void testA_initislstate() {
+    public void TestA_initislstate() {
         verifyThat("#txtUser", hasText(""));
         verifyThat("#txtPass", hasText(""));
         verifyThat("#btnSignIn", isDisabled());
@@ -108,10 +110,12 @@ public class SignInControllerTest extends ApplicationTest{
         verifyThat("#alertShortUser",anything());
         clickOn("#btnOkS");
    }
+   
     
    /**
     * Method that checks if an alert pops up when a username that is too long is introduced, in case the program couldn't take it.
     */
+   /*
    @Test
    public void TestF_userComicallyLong() {
        clickOn("#txtUser");
@@ -119,33 +123,79 @@ public class SignInControllerTest extends ApplicationTest{
         clickOn("#txtPass");
         write("validpassword");
         clickOn("#btnSignIn");
-        verifyThat("#alertlongUser",anything());        
+        verifyThat("Username is too long",isVisible());        
         clickOn("#btnOkL");
    }
+   */
    
    /**
     * Method that checks if the program crashes when a password that is too long is introduced, in case the program couldn't take it.
     */
+   /*
    @Test
+   @Ignore
    public void TestG_passComicallyLong() {
        clickOn("#txtUser");
         write("validusername");
         clickOn("#txtPass");
         write("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
         clickOn("#btnSignIn");
+        verifyThat("User or password are incorrect.",isVisible());
+        clickOn("#btnOkH");
         
    }
+   */
+   /**
+    * Method that introduces the wrong login but the right password.
+    */
+   @Test
+    public void TestH_SigningIn(){
+        clickOn("#txtUser");
+        write("martinWrong");
+        clickOn("#txtPass");
+        write("Aa123");
+        clickOn("#btnSignIn");
+        verifyThat("User or password are incorrect.",isVisible());
+        clickOn("#btnOkH");
+        
+    }
+    /**
+    * Method that introduces the right login but the wrong password.
+    */
+   @Test
+    public void TestI_SigningIn(){
+        clickOn("#txtUser");
+        write("martinG");
+        clickOn("#txtPass");
+        write("Aa123");
+        clickOn("#btnSignIn");
+        verifyThat("User or password are incorrect.",isVisible());        
+        clickOn("#btnOkH");
+    }
    
    /**
     * Method that introduces correct login information and checks if the next window loads.
     */
    @Test
-    public void TestH_SigningIn(){
+    public void TestJ_SigningIn(){
         clickOn("#txtUser");
-        write("kerman");
+        write("martinG");
         clickOn("#txtPass");
-        write("1Aqwe");
+        write("Aa1234");
         clickOn("#btnSignIn");
         verifyThat("#windowSignOut", isVisible());
+    }
+    /**
+    * Method for when the server is off.
+    */
+   @Test
+    public void TestK_SigningIn(){
+        clickOn("#txtUser");
+        write("martinG");
+        clickOn("#txtPass");
+        write("Aa1234");
+        clickOn("#btnSignIn");
+        verifyThat("An unexpected error ocurred on the server.",isVisible());        
+        clickOn("#btnOkH");
     }
 }

@@ -22,7 +22,9 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import mkma.signupsignin.signable.SignableFactory;
 import signable.Signable;
 import user_message.User;
@@ -127,12 +129,13 @@ public class SignUpController{
     @FXML
     private void handleButtonBack(ActionEvent event) throws IOException {
         //It gets the FXML of the sign-in window
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("SignIn.fxml"));
+        /*FXMLLoader loader = new FXMLLoader(getClass().getResource("SignIn.fxml"));
         Parent root = (Parent) loader.load();
         //It creates a controller for the window and runs it
         SignInController controller = (loader.getController());
         controller.setStage(stage);
-        controller.initStage(root);
+        controller.initStage(root);*/
+        stage.close();
     }
 
 
@@ -161,17 +164,13 @@ public class SignUpController{
      */
     public void initStage(Parent root) {
         Scene scene = new Scene(root, 691, 405);
+        stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
         stage.setTitle("Sign-up");
         stage.setResizable(false);
         stage.setScene(scene);
-        txtUser.setText("");
-        txtPass.setText("");
-        txtPassAgain.setText("");
-        txtEmail.setText("");
-        txtName.setText("");
-
+        stage.setOnShowing(this::handleWindowShowing);
         //It calls the method that handles how the elements show up
-        handleWindowShowing();
         stage.show();
     }
 
@@ -179,9 +178,16 @@ public class SignUpController{
      * Method used to set various additions to the elements, like tooltip
      * buttons, or addition of listeners.
      */
-    private void handleWindowShowing() {
+    private void handleWindowShowing(WindowEvent event) {
         //It disables the signup button
         btnSignUp.setDisable(true);
+        
+        txtUser.setText("");
+        txtPass.setText("");
+        txtPassAgain.setText("");
+        txtEmail.setText("");
+        txtName.setText("");
+        
 
         //It sets tooltips in the buttons and text fields, to tell the user about them
         btnSignUp.setTooltip(new Tooltip("Click to create an user "

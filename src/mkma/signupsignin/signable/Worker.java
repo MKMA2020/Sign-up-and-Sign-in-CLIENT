@@ -21,9 +21,10 @@ public class Worker extends Thread {
 
     private Message message;
     private Message received;
-    
+
     /**
      * Constructor that sets the Worker message.
+     *
      * @param message message that is set.
      */
     public Worker(Message message) {
@@ -60,29 +61,33 @@ public class Worker extends Thread {
             Logger.getLogger(Worker.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
-                entry.close();
-            } catch (IOException ex) {
-                System.out.println(ex.getMessage());
-            }
-            try {
-                input.close();
-            } catch (IOException ex) {
-                System.out.println(ex.getMessage());
-            }
-            try {
-                objectOutputStream.close();
-            } catch (IOException ex) {
-                System.out.println(ex.getMessage());
-            }
-            try {
-                outputStream.close();
-            } catch (IOException ex) {
-                System.out.println(ex.getMessage());
-            }
-            try {
-                socket.close();
-            } catch (IOException ex) {
-                System.out.println(ex.getMessage());
+                try {
+                    entry.close();
+                } catch (IOException ex) {
+                    System.out.println(ex.getMessage());
+                }
+                try {
+                    input.close();
+                } catch (IOException ex) {
+                    System.out.println(ex.getMessage());
+                }
+                try {
+                    objectOutputStream.close();
+                } catch (IOException ex) {
+                    System.out.println(ex.getMessage());
+                }
+                try {
+                    outputStream.close();
+                } catch (IOException ex) {
+                    System.out.println(ex.getMessage());
+                }
+                try {
+                    socket.close();
+                } catch (IOException ex) {
+                    System.out.println(ex.getMessage());
+                }
+            } catch (NullPointerException e) {
+                Logger.getLogger(Worker.class.getName()).log(Level.SEVERE, "Connection refused");
             }
         }
     }
