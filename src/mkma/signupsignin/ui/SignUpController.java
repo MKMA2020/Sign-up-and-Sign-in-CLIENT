@@ -1,12 +1,12 @@
 package mkma.signupsignin.ui;
 
 import exceptions.DataBaseConnectionException;
-import exceptions.PassNotCorrectException;
 import exceptions.ServerErrorException;
 import exceptions.TimeOutException;
 import exceptions.UserExistsException;
-import exceptions.UserNotFoundException;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javafx.beans.Observable;
@@ -33,8 +33,7 @@ import user_message.User;
  *
  * @author Kerman Rodríguez
  */
-
-public class SignUpController{
+public class SignUpController {
 
     /**
      * The stage that is going to be shown
@@ -76,15 +75,37 @@ public class SignUpController{
      */
     @FXML
     private Button btnBack;
+    /*
+     * Button that closes the window 
+     */
+    @FXML
+    private Button closeButton;
+
+    @FXML
+    public void exitApplication(ActionEvent event) throws IOException {
+        // get a handle to the stage
+        Stage stage = (Stage) closeButton.getScene().getWindow();
+        // do what you have to do
+        //It gets the FXML of the sign-in window
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("SignIn.fxml"));
+        Parent root = (Parent) loader.load();
+        //It creates a controller for the window and runs it
+        SignInController controller = (loader.getController());
+
+        controller.setStage(stage);
+
+        controller.initStage(root);
+    }
 
     /**
      * Method that runs when you click the sign-up button. It calls the
      * validation method and if valid, it sends a user to the implementation.
-     * 
+     *
      * @param event it is the clicking event of the button
      */
     @FXML
     private void handleButtonSignUp(ActionEvent event) {
+        Logger.getLogger(SignUpController.class.getName()).log(Level.INFO, "SignUp Button Clicked");
         boolean error = validate();
         String alertError = null;
         boolean alertNeeded = false;
@@ -126,6 +147,8 @@ public class SignUpController{
      */
     @FXML
     private void handleButtonBack(ActionEvent event) throws IOException {
+        Logger.getLogger(SignUpController.class
+                .getName()).log(Level.INFO, "Back Button Clicked, Opening: SignInWindow");
         //It gets the FXML of the sign-in window
         FXMLLoader loader = new FXMLLoader(getClass().getResource("SignIn.fxml"));
         Parent root = (Parent) loader.load();
@@ -134,7 +157,6 @@ public class SignUpController{
         controller.setStage(stage);
         controller.initStage(root);
     }
-
 
     /**
      * Method to get the stage in order to use in in the window
@@ -227,9 +249,9 @@ public class SignUpController{
         //Checks if the password meets the requirements
         if (isValidPass(txtPass.getText()) == false) {
             error = true;
-            alertList = alertList.concat("The password needs to contain at least an upper-case, lower-case and a number.\n");
+            alertList = alertList.concat("The password has to contain\nat least an upper-case,\nlower-case and a number.\n");
         }
-        //Checks if the password is too short
+        //Checks if the password is too short 
         if (txtPass.getText().length() < 5) {
             error = true;
             alertList = alertList.concat("The password is too short.\n");

@@ -66,17 +66,14 @@ public class SignInController {
      * applicattions main window will be launched.
      * 
      * @param event current event.
-     * @throws IOException when there are input/output errors
+     * @throws IOException when there is an input/output error
      */
     @FXML
     private void handleButtonSignIn(ActionEvent event) throws IOException {
-
+        Logger.getLogger(SignInController.class.getName()).log(Level.INFO,"SignIn Button Clicked");
         boolean error = false;
         String alertError = null;
         boolean alertNeeded = false;
-        final Logger LOG = Logger.getLogger("mkma.signupsignin.ui.SignInController.java");
-        LOG.log(Level.INFO, "Attempt to sign in");
-
         if (this.txtUser.getText().trim().length() < 5) {
             Alert alertShortUser = new Alert(Alert.AlertType.ERROR, "Username is"
                     + " too short", ButtonType.OK);
@@ -98,7 +95,7 @@ public class SignInController {
             User user = new User();
             user.setLogin(txtUser.getText());
             user.setPassword(txtPass.getText());
-            LOG.log(Level.INFO, "Petition created by: " + user.getLogin());
+            Logger.getLogger(SignUpController.class.getName()).log(Level.INFO,"New Petition to the server by: " + user.getLogin());
             SignableFactory factory = new SignableFactory();
             Signable signable = factory.getSignable();
             try {
@@ -107,11 +104,11 @@ public class SignInController {
             } catch (UserNotFoundException | PassNotCorrectException ex) {
                 alertNeeded = true;
                 alertError = "User or password are incorrect.";
+                
             } catch (DataBaseConnectionException | ServerErrorException | TimeOutException ex) {
                 alertNeeded = true;
                 alertError = "An unexpected error ocurred on the server.";
             }
-
             if (alertNeeded) {
                 Alert exceptionAlert = new Alert(Alert.AlertType.ERROR,
                         alertError, ButtonType.OK);
