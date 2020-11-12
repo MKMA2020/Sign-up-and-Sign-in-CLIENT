@@ -91,8 +91,8 @@ public class SignInControllerTest extends ApplicationTest{
         clickOn("#txtPass");
         write("validpassword");
         clickOn("#btnSignIn");
-        verifyThat("#alertlongUser",anything());        
-        clickOn("#btnOkL");
+        verifyThat("Error",isVisible());        
+        clickOn("Aceptar");
    }
    
    /**
@@ -105,8 +105,8 @@ public class SignInControllerTest extends ApplicationTest{
         clickOn("#txtPass");
         write("validpassword");
         clickOn("#btnSignIn");
-        verifyThat("#alertShortUser",anything());
-        clickOn("#btnOkS");
+        verifyThat("Error",isVisible());
+        clickOn("Aceptar");
    }
     
    /**
@@ -119,8 +119,8 @@ public class SignInControllerTest extends ApplicationTest{
         clickOn("#txtPass");
         write("validpassword");
         clickOn("#btnSignIn");
-        verifyThat("#alertlongUser",anything());        
-        clickOn("#btnOkL");
+        verifyThat("Error",isVisible());        
+        clickOn("Aceptar");
    }
    
    /**

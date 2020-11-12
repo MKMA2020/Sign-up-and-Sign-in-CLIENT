@@ -83,6 +83,7 @@ public class SignInController {
             Button okButton = (Button) alertShortUser.getDialogPane().lookupButton(ButtonType.OK);
             okButton.setId("btnOkS");
             alertShortUser.showAndWait();
+            LOG.log(Level.INFO, "The user " + txtUser.getText() + " introduced a username that is too short.");
             error = true;
         }
         if (this.txtUser.getText().trim().length() > 20) {
@@ -92,6 +93,7 @@ public class SignInController {
             okButton.setId("btnOkL");
 
             alertlongUser.showAndWait();
+            LOG.log(Level.INFO, "The user " + txtUser.getText() + " introduced a username that is too long.");
             error = true;
         }
         if (!error) {
