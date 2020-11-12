@@ -106,12 +106,15 @@ public class SignInController {
             try {
                 user = signable.signIn(user);
                 openWindow(stage, user);
+                LOG.log(Level.INFO, "The user " + user.getLogin() + " successfully signed in.");
             } catch (UserNotFoundException | PassNotCorrectException ex) {
                 alertNeeded = true;
                 alertError = "User or password are incorrect.";
+                LOG.log(Level.INFO, "The user " + user.getLogin() + " introduced the wrong password.");
             } catch (DataBaseConnectionException | ServerErrorException | TimeOutException ex) {
                 alertNeeded = true;
                 alertError = "An unexpected error ocurred on the server.";
+                LOG.log(Level.INFO, "The user " + user.getLogin() + " couldn't connect to the server.");
             }
 
             if (alertNeeded) {
