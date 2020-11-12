@@ -91,9 +91,7 @@ public class SignUpController {
         Parent root = (Parent) loader.load();
         //It creates a controller for the window and runs it
         SignInController controller = (loader.getController());
-
         controller.setStage(stage);
-
         controller.initStage(root);
     }
 
@@ -104,31 +102,57 @@ public class SignUpController {
      * @param event it is the clicking event of the button
      */
     @FXML
-    private void handleButtonSignUp(ActionEvent event) {
+    private void handleButtonSignUp(ActionEvent event) throws IOException {
+        // Sign Up button clicked logger
         Logger.getLogger(SignUpController.class.getName()).log(Level.INFO, "SignUp Button Clicked");
+        // Check if there are errors in the text fields
         boolean error = validate();
         String alertError = null;
         boolean alertNeeded = false;
         if (!error) {
+            // Create user
             User user = new User();
+            // Set data from text fields to user
             user.setLogin(txtUser.getText());
             user.setPassword(txtPass.getText());
             user.setEmail(txtEmail.getText());
             user.setFullName(txtName.getText());
+            // Get a new signable Object
             SignableFactory factory = new SignableFactory();
             Signable signable = factory.getSignable();
             try {
+                // Call signUp method on Signable
                 User received = signable.signUp(user);
+                // If no exception continue
                 btnSignUp.setText("Signed Up");
                 btnSignUp.setDisable(true);
+
+// MODIFICACION DIN
+
+                // Show Alert all Okay
+                Alert exceptionAlert = new Alert(AlertType.CONFIRMATION,
+                        "User succesfully created", ButtonType.OK);
+                exceptionAlert.showAndWait();
+                // Get FXML of the sign-in window
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("SignIn.fxml"));
+                Parent root = (Parent) loader.load();
+                // Create a controller for the window and run
+                SignInController controller = (loader.getController());
+                controller.setStage(stage);
+                controller.initStage(root);
+
+// FIN MODIFICACION DIN
+
             } catch (DataBaseConnectionException | ServerErrorException | TimeOutException ex) {
                 alertNeeded = true;
+                // Message to be shown to user:
                 alertError = "An unexpected error ocurred on the server.";
             } catch (UserExistsException ex) {
                 alertNeeded = true;
+                // Message to be shown to user:
                 alertError = "The user you are trying to create already exists.";
             }
-
+            // Show error alert
             if (alertNeeded) {
                 Alert exceptionAlert = new Alert(AlertType.ERROR,
                         alertError, ButtonType.OK);
@@ -147,12 +171,13 @@ public class SignUpController {
      */
     @FXML
     private void handleButtonBack(ActionEvent event) throws IOException {
+        // Back button pressed logger
         Logger.getLogger(SignUpController.class
                 .getName()).log(Level.INFO, "Back Button Clicked, Opening: SignInWindow");
-        //It gets the FXML of the sign-in window
+        // Get FXML ofthe sign-in window
         FXMLLoader loader = new FXMLLoader(getClass().getResource("SignIn.fxml"));
         Parent root = (Parent) loader.load();
-        //It creates a controller for the window and runs it
+        // Create a controller for the window and run
         SignInController controller = (loader.getController());
         controller.setStage(stage);
         controller.initStage(root);
@@ -186,13 +211,14 @@ public class SignUpController {
         stage.setTitle("Sign-up");
         stage.setResizable(false);
         stage.setScene(scene);
+        // Set text fields empty
         txtUser.setText("");
         txtPass.setText("");
         txtPassAgain.setText("");
         txtEmail.setText("");
         txtName.setText("");
 
-        //It calls the method that handles how the elements show up
+        // Call method that handles how the elements show up
         handleWindowShowing();
         stage.show();
     }
@@ -266,7 +292,7 @@ public class SignUpController {
             error = true;
             alertList = alertList.concat("The email format is not valid.\n");
         }
-        //Shows an alert with any errors there might have been
+        // Show alert if any or more errors exist
         if (error) {
             Alert listAllAlerts = new Alert(AlertType.ERROR,
                     alertList, ButtonType.OK);
@@ -327,11 +353,14 @@ public class SignUpController {
      * observed
      */
     private void textChanged(Observable observable) {
+        // If all buttons contain text
         if (txtUser.getText().trim().equals("") || txtPass.getText().trim().equals("")
                 || txtPassAgain.getText().trim().equals("") || txtEmail.getText().trim().equals("")
                 || txtName.getText().trim().equals("")) {
+            // Set btnSignUp to enabled
             btnSignUp.setDisable(true);
         } else {
+            // Set btnSignUp to disabled
             btnSignUp.setDisable(false);
         }
     }

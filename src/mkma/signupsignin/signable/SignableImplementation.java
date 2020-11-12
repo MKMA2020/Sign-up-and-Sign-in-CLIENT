@@ -45,29 +45,27 @@ public class SignableImplementation implements Signable {
             Worker worker = new Worker(message);
             worker.start();
             worker.join();
-            try {
-                received = worker.getReceived();
 
-                switch (received.getMessageType()) {
+            received = worker.getReceived();
 
-                    case DATABASEERROR:
-                        throw new DataBaseConnectionException();
-                    case PASSNOTCORRECT:
-                        throw new PassNotCorrectException();
-                    case SERVERERROR:
-                        throw new ServerErrorException();
-                    case TIMEOUTEXCEPTION:
-                        throw new TimeOutException();
-                    case USERNOTFOUND:
-                        throw new UserNotFoundException();
-                    default:
-                        break;
-                }
-            } catch (NullPointerException x) {
-                // Server will be offline.
-                throw new TimeOutException();
+            switch (received.getMessageType()) {
+
+                case DATABASEERROR:
+                    throw new DataBaseConnectionException();
+                case PASSNOTCORRECT:
+                    throw new PassNotCorrectException();
+                case SERVERERROR:
+                    throw new ServerErrorException();
+                case TIMEOUTEXCEPTION:
+                    throw new TimeOutException();
+                case USERNOTFOUND:
+                    throw new UserNotFoundException();
+                default:
+                    break;
             }
-
+        } catch (NullPointerException x) {
+            // Server will be offline.
+            throw new TimeOutException();
         } catch (InterruptedException ex) {
             Logger.getLogger(SignableImplementation.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -113,7 +111,9 @@ public class SignableImplementation implements Signable {
                 default:
                     break;
             }
-
+        } catch (NullPointerException x) {
+            // Server will be offline.
+            throw new TimeOutException();
         } catch (InterruptedException ex) {
             Logger.getLogger(SignableImplementation.class.getName()).log(Level.SEVERE, null, ex);
         }

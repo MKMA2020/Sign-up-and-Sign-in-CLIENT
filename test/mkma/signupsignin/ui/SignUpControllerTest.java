@@ -7,12 +7,10 @@ import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import static org.testfx.api.FxAssert.verifyThat;
 import org.testfx.framework.junit.ApplicationTest;
-import static org.testfx.matcher.base.NodeMatchers.anything;
 import static org.testfx.matcher.base.NodeMatchers.isDisabled;
 import static org.testfx.matcher.base.NodeMatchers.isEnabled;
 import static org.testfx.matcher.base.NodeMatchers.isVisible;
 import static org.testfx.matcher.control.TextInputControlMatchers.hasText;
-import org.testfx.util.WaitForAsyncUtils;
 
 /**
  * TestFX test class for SignUpController.
@@ -53,7 +51,6 @@ public class SignUpControllerTest extends ApplicationTest {
      * contain text. If there is at least one empty field SignUpButton should be
      * disabled.
      */
-    
     @Test
     public void testB_SignUpButtonEnabled() {
 
@@ -95,78 +92,119 @@ public class SignUpControllerTest extends ApplicationTest {
         clickOn("#txtName");
         write("Alberto García");
         clickOn("#btnSignUp");
-        verifyThat("Error", isVisible());
+        verifyThat("The username is too short.\n", isVisible());
+        clickOn("Aceptar");
+    }
+    
+        /**
+     * This method will verify that an alert is thrown if the user is too long.
+     */
+    @Test
+    public void testD_UsernameLong() {
+        clickOn("#txtUser");
+        write("AlbertoAlbertoAlbertoAlberto");
+        clickOn("#txtPass");
+        write("Alberto!Garcia8");
+        clickOn("#txtPassAgain");
+        write("Alberto!Garcia8");
+        clickOn("#txtEmail");
+        write("albertogarcia@gmail.com");
+        clickOn("#txtName");
+        write("Alberto García");
+        clickOn("#btnSignUp");
+        verifyThat("The username is too long.\n", isVisible());
+        clickOn("Aceptar");
+    }
+
+    /**
+     * This method will verify that an alert is thrown if the password is too
+     * short.
+     */
+    @Test
+    public void testE_PasswordShort() {
+        clickOn("#txtUser");
+        write("Alberto");
+        clickOn("#txtPass");
+        write("1aA");
+        clickOn("#txtPassAgain");
+        write("1aA");
+        clickOn("#txtEmail");
+        write("albertogarcia@gmail.com");
+        clickOn("#txtName");
+        write("Alberto García");
+        clickOn("#btnSignUp");
+        verifyThat("The password is too short.\n", isVisible());
         clickOn("Aceptar");
     }
 
     /**
      * This method will verify that an alert is thrown if the password does not
-     * meet criteria.
+     * contain one upper case, one lowercase and a number.
      */
     @Test
-    public void testD_PasswordShort() {
+    public void testF_PasswordWeak() {
         clickOn("#txtUser");
         write("Alberto");
         clickOn("#txtPass");
-        write("1");
+        write("asdasd");
         clickOn("#txtPassAgain");
-        write("Alberto!Garcia8");
+        write("asdasd");
         clickOn("#txtEmail");
         write("albertogarcia@gmail.com");
         clickOn("#txtName");
         write("Alberto García");
         clickOn("#btnSignUp");
-        verifyThat("Error", isVisible());
-        clickOn("Aceptar");
-    }
-    
-                   /**
-     * This method will verify that an alert is thrown if the password does not match.
-     */
-    @Test
-    public void testE_PasswordNoMatch(){
-        clickOn("#txtUser");
-        write("Alberto");
-        clickOn("#txtPass");
-        write("Alberto!Garcia8");
-        clickOn("#txtPassAgain");
-        write("Alberto!Garcia81");
-        clickOn("#txtEmail");
-        write("albertogarcia@gmail.com");
-        clickOn("#txtName");
-        write("Alberto García");
-        clickOn("#btnSignUp");
-        verifyThat("Error",isVisible()); 
-        clickOn("Aceptar");
-    }
-    
-                       /**
-     * This method will verify that an alert is thrown if the Email format is incorrect.
-     */
-    @Test
-    public void testF_EmailWrong(){
-        clickOn("#txtUser");
-        write("Alberto");
-        clickOn("#txtPass");
-        write("Alberto!Garcia8");
-        clickOn("#txtPassAgain");
-        write("Alberto!Garcia81");
-        clickOn("#txtEmail");
-        write("albertogarciagmail.com");
-        clickOn("#txtName");
-        write("Alberto García");
-        clickOn("#btnSignUp");
-        verifyThat("Error",isVisible()); 
+        verifyThat("The password has to contain\nat least an upper-case,\nlower-case and a number.\n", isVisible());
         clickOn("Aceptar");
     }
 
     /**
-     * This method will verify that once pushed the button Sign Up changes to
-     * Signed Up.
+     * This method will verify that an alert is thrown if the password does not
+     * match.
      */
-    
     @Test
-    public void testG_SignUpButtonChanged() {
+    public void testG_PasswordNoMatch() {
+        clickOn("#txtUser");
+        write("Alberto");
+        clickOn("#txtPass");
+        write("Alberto!Garcia8");
+        clickOn("#txtPassAgain");
+        write("Alberto!Garcia81");
+        clickOn("#txtEmail");
+        write("albertogarcia@gmail.com");
+        clickOn("#txtName");
+        write("Alberto García");
+        clickOn("#btnSignUp");
+        verifyThat("The passwords don´t match.\n", isVisible());
+        clickOn("Aceptar");
+    }
+
+    /**
+     * This method will verify that an alert is thrown if the Email format is
+     * incorrect.
+     */
+    @Test
+    public void testH_EmailWrong() {
+        clickOn("#txtUser");
+        write("Alberto");
+        clickOn("#txtPass");
+        write("Alberto!Garcia8");
+        clickOn("#txtPassAgain");
+        write("Alberto!Garcia8");
+        clickOn("#txtEmail");
+        write("albertogarciagmailcom");
+        clickOn("#txtName");
+        write("Alberto García");
+        clickOn("#btnSignUp");
+        verifyThat("The email format is not valid.\n", isVisible());
+        clickOn("Aceptar");
+    }
+
+    /**
+     * This method will verify that once pushed the button Sign Up works.
+     */
+    @Test
+    public void testI_SignUpButtonChanged() {
         clickOn("#txtUser");
         write("Alberto");
         clickOn("#txtPass");
@@ -178,7 +216,8 @@ public class SignUpControllerTest extends ApplicationTest {
         clickOn("#txtName");
         write("Alberto García");
         clickOn("#btnSignUp");
-        verifyThat("#btnSignUp", isDisabled());
+        verifyThat("#btnSignUp", isEnabled());
+        clickOn("Aceptar");
     }
 
     /**
@@ -186,7 +225,7 @@ public class SignUpControllerTest extends ApplicationTest {
      * Up window.
      */
     @Test
-    public void testH_btnBackOK() {
+    public void testJ_btnBackOK() {
         clickOn("#btnBack");
         verifyThat("#windowSignIn", isVisible());
     }
