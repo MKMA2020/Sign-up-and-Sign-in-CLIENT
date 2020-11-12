@@ -45,23 +45,26 @@ public class SignableImplementation implements Signable {
             Worker worker = new Worker(message);
             worker.start();
             worker.join();
+            try {
+                received = worker.getReceived();
 
-            received = worker.getReceived();
+                switch (received.getMessageType()) {
 
-            switch (received.getMessageType()) {
-
-                case DATABASEERROR:
-                    throw new DataBaseConnectionException();
-                case PASSNOTCORRECT:
-                    throw new PassNotCorrectException();
-                case SERVERERROR:
-                    throw new ServerErrorException();
-                case TIMEOUTEXCEPTION:
-                    throw new TimeOutException();
-                case USERNOTFOUND:
-                    throw new UserNotFoundException();
-                default:
-                    break;
+                    case DATABASEERROR:
+                        throw new DataBaseConnectionException();
+                    case PASSNOTCORRECT:
+                        throw new PassNotCorrectException();
+                    case SERVERERROR:
+                        throw new ServerErrorException();
+                    case TIMEOUTEXCEPTION:
+                        throw new TimeOutException();
+                    case USERNOTFOUND:
+                        throw new UserNotFoundException();
+                    default:
+                        break;
+                }
+            } catch (NullPointerException ex) {
+                throw new TimeOutException();
             }
 
         } catch (InterruptedException ex) {

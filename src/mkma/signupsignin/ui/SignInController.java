@@ -10,6 +10,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.Observable;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -22,6 +23,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.stage.Stage;
 import mkma.signupsignin.signable.SignableFactory;
+import static mkma.signupsignin.ui.SignUpController.LOG;
 import signable.Signable;
 import user_message.User;
 
@@ -58,13 +60,17 @@ public class SignInController {
      */
     @FXML
     private Button btnSignUp;
+    /**
+     * The logger for the sign in
+     */
+    static final Logger LOG = Logger.getLogger("mkma.signupsignin.ui.SignInController.java");
 
     /**
      * This method gets launched whenever the user hits the login button In case
      * the username is either longer than 20 or shorther than 5 chars it will
      * send and alert. IF there is no error and everything goes through the
      * applicattions main window will be launched.
-     * 
+     *
      * @param event current event.
      * @throws IOException when there are input/output errors
      */
@@ -74,8 +80,7 @@ public class SignInController {
         boolean error = false;
         String alertError = null;
         boolean alertNeeded = false;
-        final Logger LOG = Logger.getLogger("mkma.signupsignin.ui.SignInController.java");
-        LOG.log(Level.INFO, "Attempt to sign in");
+        LOG.log(Level.INFO, "Sign in button clicked");
 
         if (this.txtUser.getText().trim().length() < 5) {
             Alert alertShortUser = new Alert(Alert.AlertType.ERROR, "Username is"
@@ -98,16 +103,18 @@ public class SignInController {
             User user = new User();
             user.setLogin(txtUser.getText());
             user.setPassword(txtPass.getText());
-            LOG.log(Level.INFO, "Petition created by: " + user.getLogin());
+            LOG.log(Level.INFO, "Attempt to log in by " + txtUser.getText());
             SignableFactory factory = new SignableFactory();
             Signable signable = factory.getSignable();
             try {
                 user = signable.signIn(user);
                 openWindow(stage, user);
             } catch (UserNotFoundException | PassNotCorrectException ex) {
+                LOG.log(Level.INFO, "User or password are wrong");
                 alertNeeded = true;
                 alertError = "User or password are incorrect.";
             } catch (DataBaseConnectionException | ServerErrorException | TimeOutException ex) {
+                LOG.log(Level.INFO, "A server error happened");
                 alertNeeded = true;
                 alertError = "An unexpected error ocurred on the server.";
             }
@@ -128,7 +135,6 @@ public class SignInController {
      * @param event event used
      * @throws IOException when there are input/output errors.
      */
-
     @FXML
     private void handleButtonSignUp(ActionEvent event) throws IOException {
         start_signup(stage);
@@ -142,8 +148,10 @@ public class SignInController {
     public Stage getStage() {
         return stage;
     }
+
     /**
      * Method that sets the stage
+     *
      * @param stage Stage used
      */
 
@@ -156,13 +164,13 @@ public class SignInController {
      *
      * @param root Parent of the window
      */
-
     public void initStage(Parent root) {
         Scene scene = new Scene(root);
+        LOG.log(Level.INFO, "Sign in window showing");
         stage.setScene(scene);
         stage.setResizable(false);
         stage.setTitle("Sign In");
-        handleWindowShowing();
+        stage.setOnShowing(this::handleWindowShowing);
         txtUser.textProperty().addListener((this::textchanged));
         txtPass.textProperty().addListener((this::textchanged));
         stage.show();
@@ -172,9 +180,10 @@ public class SignInController {
     /**
      * When the window's first launched, sets the logIn button to disabled and
      * adds 2 tooltips.
+     *
+     * @param the event executed
      */
-
-    private void handleWindowShowing() {
+    private void handleWindowShowing(Event event) {
         txtUser.setText("");
         txtPass.setText("");
         btnSignIn.setDisable(true);
@@ -189,7 +198,6 @@ public class SignInController {
      *
      * @param obv parameter used to observe the text fields.
      */
-
     private void textchanged(Observable obv) {
 
         if (this.txtUser.getText().trim().equals("") || this.txtPass.getText().trim().equals("")) {
@@ -206,7 +214,6 @@ public class SignInController {
      * @param primaryStage Main stage
      * @throws IOException IO issues
      */
-
     private void start_signup(Stage primaryStage) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("SignUp.fxml"));
         Parent root = (Parent) loader.load();

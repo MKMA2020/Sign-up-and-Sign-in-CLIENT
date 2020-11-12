@@ -7,10 +7,13 @@ import exceptions.TimeOutException;
 import exceptions.UserExistsException;
 import exceptions.UserNotFoundException;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javafx.beans.Observable;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -22,6 +25,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import mkma.signupsignin.signable.SignableFactory;
 import signable.Signable;
@@ -33,8 +37,7 @@ import user_message.User;
  *
  * @author Kerman Rodríguez
  */
-
-public class SignUpController{
+public class SignUpController {
 
     /**
      * The stage that is going to be shown
@@ -76,19 +79,25 @@ public class SignUpController{
      */
     @FXML
     private Button btnBack;
+    /**
+     * The logger for the sign up
+     */
+    static final Logger LOG = Logger.getLogger("mkma.signupsignin.ui.SignUpController.java");
 
     /**
      * Method that runs when you click the sign-up button. It calls the
      * validation method and if valid, it sends a user to the implementation.
-     * 
+     *
      * @param event it is the clicking event of the button
      */
     @FXML
     private void handleButtonSignUp(ActionEvent event) {
+        LOG.log(Level.INFO, "Sign up button clicked");
         boolean error = validate();
         String alertError = null;
         boolean alertNeeded = false;
         if (!error) {
+            LOG.log(Level.INFO, "Sign up attempt by user " + txtUser.getText());
             User user = new User();
             user.setLogin(txtUser.getText());
             user.setPassword(txtPass.getText());
@@ -98,12 +107,15 @@ public class SignUpController{
             Signable signable = factory.getSignable();
             try {
                 User received = signable.signUp(user);
+                LOG.log(Level.INFO, "User " + user.getLogin() + " registered.");
                 btnSignUp.setText("Signed Up");
                 btnSignUp.setDisable(true);
             } catch (DataBaseConnectionException | ServerErrorException | TimeOutException ex) {
+                LOG.log(Level.INFO, "Server exception catched.");
                 alertNeeded = true;
                 alertError = "An unexpected error ocurred on the server.";
             } catch (UserExistsException ex) {
+                LOG.log(Level.INFO, "User already exists");
                 alertNeeded = true;
                 alertError = "The user you are trying to create already exists.";
             }
@@ -126,15 +138,9 @@ public class SignUpController{
      */
     @FXML
     private void handleButtonBack(ActionEvent event) throws IOException {
-        //It gets the FXML of the sign-in window
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("SignIn.fxml"));
-        Parent root = (Parent) loader.load();
-        //It creates a controller for the window and runs it
-        SignInController controller = (loader.getController());
-        controller.setStage(stage);
-        controller.initStage(root);
+        LOG.log(Level.INFO, "Going back to sign in.");
+        stage.close();
     }
-
 
     /**
      * Method to get the stage in order to use in in the window
@@ -161,27 +167,38 @@ public class SignUpController{
      */
     public void initStage(Parent root) {
         Scene scene = new Scene(root, 691, 405);
+        stage = new Stage();
+        LOG.log(Level.INFO, "Entering sign-up window");
+        stage.initModality(Modality.APPLICATION_MODAL);
         stage.setTitle("Sign-up");
         stage.setResizable(false);
         stage.setScene(scene);
-        txtUser.setText("");
-        txtPass.setText("");
-        txtPassAgain.setText("");
-        txtEmail.setText("");
-        txtName.setText("");
-
-        //It calls the method that handles how the elements show up
-        handleWindowShowing();
+        //It sets listeners to the text fields with a method that checks if they are empty
+        txtUser.textProperty().addListener(this::textChanged);
+        txtPass.textProperty().addListener(this::textChanged);
+        txtPassAgain.textProperty().addListener(this::textChanged);
+        txtEmail.textProperty().addListener(this::textChanged);
+        txtName.textProperty().addListener(this::textChanged);
+        //It sets the method that controls the showing of the window
+        stage.setOnShowing(this::handleWindowShowing);
         stage.show();
     }
 
     /**
      * Method used to set various additions to the elements, like tooltip
      * buttons, or addition of listeners.
+     *
+     * @param the event executed
      */
-    private void handleWindowShowing() {
+    private void handleWindowShowing(Event event) {
         //It disables the signup button
         btnSignUp.setDisable(true);
+        //It resets the content of the text fields
+        txtUser.setText("");
+        txtPass.setText("");
+        txtPassAgain.setText("");
+        txtEmail.setText("");
+        txtName.setText("");
 
         //It sets tooltips in the buttons and text fields, to tell the user about them
         btnSignUp.setTooltip(new Tooltip("Click to create an user "
@@ -194,13 +211,6 @@ public class SignUpController{
         txtPassAgain.setTooltip(new Tooltip("Repeat password"));
         txtEmail.setTooltip(new Tooltip("Valid format e-mail"));
         txtName.setTooltip(new Tooltip("Write your name and surname"));
-
-        //It sets listeners to the text fields with a method that checks if they are empty
-        txtUser.textProperty().addListener(this::textChanged);
-        txtPass.textProperty().addListener(this::textChanged);
-        txtPassAgain.textProperty().addListener(this::textChanged);
-        txtEmail.textProperty().addListener(this::textChanged);
-        txtName.textProperty().addListener(this::textChanged);
     }
 
     /**
