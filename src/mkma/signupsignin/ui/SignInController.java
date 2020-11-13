@@ -167,25 +167,16 @@ public class SignInController {
         stage.setScene(scene);
         stage.setResizable(false);
         stage.setTitle("Sign In");
-        handleWindowShowing();
-        txtUser.textProperty().addListener((this::textchanged));
-        txtPass.textProperty().addListener((this::textchanged));
-        stage.show();
 
-    }
-
-    /**
-     * When the window's first launched, sets the logIn button to disabled and
-     * adds 2 tooltips.
-     */
-
-    private void handleWindowShowing() {
         txtUser.setText("");
         txtPass.setText("");
         btnSignIn.setDisable(true);
         btnSignUp.setTooltip(new Tooltip("Click to sign up!"));
         btnSignIn.setTooltip(new Tooltip("Click to log in!"));
-
+        
+        txtUser.textProperty().addListener((this::textchanged));
+        txtPass.textProperty().addListener((this::textchanged));
+        stage.show();
     }
 
     /**
@@ -223,7 +214,6 @@ public class SignInController {
     /**
      * Launches the main window
      *
-     * @param primaryStage Main stage
      * @param logOutStage Stage for the log out window
      * @param user user used
      * @throws IOException IO issue

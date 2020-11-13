@@ -126,7 +126,6 @@ public class SignableImplementation implements Signable {
      */
     @Override
     public User signOut(User user) {
-
         return user;
 
     }

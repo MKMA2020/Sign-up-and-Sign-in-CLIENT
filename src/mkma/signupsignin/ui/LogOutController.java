@@ -68,7 +68,6 @@ public class LogOutController implements Initializable {
         stage.setTitle("Sign In");
         stage.setResizable(false);
         stage.show();
-
     }
 
     @Override
