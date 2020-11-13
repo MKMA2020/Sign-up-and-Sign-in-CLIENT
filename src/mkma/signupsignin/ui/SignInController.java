@@ -203,8 +203,6 @@ public class SignInController {
     /**
      * Launches the main window
      *
-     * @param primaryStage Main stage
-     * @param logOutStage Stage for the log out window
      * @param user user used
      * @throws IOException IO issue
      */

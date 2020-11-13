@@ -222,7 +222,7 @@ public class SignUpControllerTest extends ApplicationTest {
         clickOn("#SignUpTxtName");
         write("Alberto García");
         clickOn("#SignUpBtnSignUp");
-        verifyThat("#SignUpBtnSignUp", isEnabled());
+        verifyThat("User succesfully created", isVisible());
         clickOn("Aceptar");
     }
 

@@ -76,7 +76,11 @@ public class SignUpController {
      */
     @FXML
     private Button SignUpBtnBack;
-
+    
+    /**
+     * Method will close SignUp window and open SignIn window.
+     * @param event The event fired.
+     */
     @FXML
     public void setOnCloseRequest(WindowEvent event) {
         Stage stageSignIn = new Stage();
@@ -98,6 +102,7 @@ public class SignUpController {
      * validation method and if valid, it sends a user to the implementation.
      *
      * @param event it is the clicking event of the button
+     * @throws IOException when there is an input/output error
      */
     @FXML
     private void handleButtonSignUp(ActionEvent event) throws IOException {
@@ -189,7 +194,7 @@ public class SignUpController {
     /**
      * Method to get the stage in order to use in in the window
      *
-     * @return the stage needed
+     * @return SignUp Stage object.
      */
     public Stage getStageSignUp() {
         return stageSignUp;
@@ -198,7 +203,7 @@ public class SignUpController {
     /**
      * Method used to set the stage to the window
      *
-     * @param stage the stage needed
+     * @param stageSignUp the stage.
      */
     public void seStageSignUp(Stage stageSignUp) {
         this.stageSignUp = stageSignUp;
