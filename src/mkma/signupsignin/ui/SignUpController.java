@@ -177,6 +177,7 @@ public class SignUpController{
     /**
      * Method used to set various additions to the elements, like tooltip
      * buttons, or addition of listeners.
+     * @param event The window itself.
      */
     private void handleWindowShowing(WindowEvent event) {
         //It disables the signup button
