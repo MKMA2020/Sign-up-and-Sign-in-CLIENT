@@ -23,11 +23,13 @@ public class SignUpControllerTest extends ApplicationTest {
     @Override
     public void start(Stage stage) throws Exception {
         new App().start(stage);
-        clickOn("#btnSignUp");
+        clickOn("#SignInbtnSignUp");
+        
     }
 
     @Override
     public void stop() {
+        
     }
 
     /**
@@ -37,13 +39,15 @@ public class SignUpControllerTest extends ApplicationTest {
      */
     @Test
     public void testA_initialstate() {
-        verifyThat("#txtUser", hasText(""));
-        verifyThat("#txtPass", hasText(""));
-        verifyThat("#txtPassAgain", hasText(""));
-        verifyThat("#txtEmail", hasText(""));
-        verifyThat("#txtName", hasText(""));
-        verifyThat("#btnSignUp", isDisabled());
-        verifyThat("#btnBack", isEnabled());
+        
+        verifyThat("#SignUpTxtUser", hasText(""));
+        verifyThat("#SignUpTxtPass", hasText(""));
+        verifyThat("#SignUpTxtPassAgain", hasText(""));
+        verifyThat("#SignUpTxtEmail", hasText(""));
+        verifyThat("#SignUpTxtName", hasText(""));
+        verifyThat("#SignUpBtnSignUp", isDisabled());
+        verifyThat("#SignUpBtnBack", isEnabled());
+        
     }
 
     /**
@@ -53,26 +57,27 @@ public class SignUpControllerTest extends ApplicationTest {
      */
     @Test
     public void testB_SignUpButtonEnabled() {
-
-        clickOn("#txtUser");
+                
+        clickOn("#SignUpTxtUser");
         write("asd");
-        verifyThat("#btnSignUp", isDisabled());
+        verifyThat("#SignUpBtnSignUp", isDisabled());
 
-        clickOn("#txtPass");
+        clickOn("#SignUpTxtPass");
         write("asd");
-        verifyThat("#btnSignUp", isDisabled());
+        verifyThat("#SignUpBtnSignUp", isDisabled());
 
-        clickOn("#txtPassAgain");
+        clickOn("#SignUpTxtPassAgain");
         write("asd");
-        verifyThat("#btnSignUp", isDisabled());
+        verifyThat("#SignUpBtnSignUp", isDisabled());
 
-        clickOn("#txtEmail");
+        clickOn("#SignUpTxtEmail");
         write("asd");
-        verifyThat("#btnSignUp", isDisabled());
+        verifyThat("#SignUpBtnSignUp", isDisabled());
 
-        clickOn("#txtName");
+        clickOn("#SignUpTxtName");
         write("asd");
-        verifyThat("#btnSignUp", isEnabled());
+        verifyThat("#SignUpBtnSignUp", isEnabled());
+        
 
     }
 
@@ -81,37 +86,38 @@ public class SignUpControllerTest extends ApplicationTest {
      */
     @Test
     public void testC_UsernameShort() {
-        clickOn("#txtUser");
+        clickOn("#SignUpTxtUser");
         write("a");
-        clickOn("#txtPass");
+        clickOn("#SignUpTxtPass");
         write("Alberto!Garcia8");
-        clickOn("#txtPassAgain");
+        clickOn("#SignUpTxtPassAgain");
         write("Alberto!Garcia8");
-        clickOn("#txtEmail");
+        clickOn("#SignUpTxtEmail");
         write("albertogarcia@gmail.com");
-        clickOn("#txtName");
+        clickOn("#SignUpTxtName");
         write("Alberto García");
-        clickOn("#btnSignUp");
+        clickOn("#SignUpBtnSignUp");
         verifyThat("The username is too short.\n", isVisible());
         clickOn("Aceptar");
     }
     
-        /**
+    /**
      * This method will verify that an alert is thrown if the user is too long.
      */
     @Test
     public void testD_UsernameLong() {
-        clickOn("#txtUser");
+       
+        clickOn("#SignUpTxtUser");
         write("AlbertoAlbertoAlbertoAlberto");
-        clickOn("#txtPass");
+        clickOn("#SignUpTxtPass");
         write("Alberto!Garcia8");
-        clickOn("#txtPassAgain");
+        clickOn("#SignUpTxtPassAgain");
         write("Alberto!Garcia8");
-        clickOn("#txtEmail");
+        clickOn("#SignUpTxtEmail");
         write("albertogarcia@gmail.com");
-        clickOn("#txtName");
+        clickOn("#SignUpTxtName");
         write("Alberto García");
-        clickOn("#btnSignUp");
+        clickOn("#SignUpBtnSignUp");
         verifyThat("The username is too long.\n", isVisible());
         clickOn("Aceptar");
     }
@@ -122,17 +128,17 @@ public class SignUpControllerTest extends ApplicationTest {
      */
     @Test
     public void testE_PasswordShort() {
-        clickOn("#txtUser");
+        clickOn("#SignUpTxtUser");
         write("Alberto");
-        clickOn("#txtPass");
+        clickOn("#SignUpTxtPass");
         write("1aA");
-        clickOn("#txtPassAgain");
+        clickOn("#SignUpTxtPassAgain");
         write("1aA");
-        clickOn("#txtEmail");
+        clickOn("#SignUpTxtEmail");
         write("albertogarcia@gmail.com");
-        clickOn("#txtName");
+        clickOn("#SignUpTxtName");
         write("Alberto García");
-        clickOn("#btnSignUp");
+        clickOn("#SignUpBtnSignUp");
         verifyThat("The password is too short.\n", isVisible());
         clickOn("Aceptar");
     }
@@ -143,17 +149,17 @@ public class SignUpControllerTest extends ApplicationTest {
      */
     @Test
     public void testF_PasswordWeak() {
-        clickOn("#txtUser");
+        clickOn("#SignUpTxtUser");
         write("Alberto");
-        clickOn("#txtPass");
+        clickOn("#SignUpTxtPass");
         write("asdasd");
-        clickOn("#txtPassAgain");
+        clickOn("#SignUpTxtPassAgain");
         write("asdasd");
-        clickOn("#txtEmail");
+        clickOn("#SignUpTxtEmail");
         write("albertogarcia@gmail.com");
-        clickOn("#txtName");
+        clickOn("#SignUpTxtName");
         write("Alberto García");
-        clickOn("#btnSignUp");
+        clickOn("#SignUpBtnSignUp");
         verifyThat("The password has to contain\nat least an upper-case,\nlower-case and a number.\n", isVisible());
         clickOn("Aceptar");
     }
@@ -164,17 +170,17 @@ public class SignUpControllerTest extends ApplicationTest {
      */
     @Test
     public void testG_PasswordNoMatch() {
-        clickOn("#txtUser");
+        clickOn("#SignUpTxtUser");
         write("Alberto");
-        clickOn("#txtPass");
+        clickOn("#SignUpTxtPass");
         write("Alberto!Garcia8");
-        clickOn("#txtPassAgain");
+        clickOn("#SignUpTxtPassAgain");
         write("Alberto!Garcia81");
-        clickOn("#txtEmail");
+        clickOn("#SignUpTxtEmail");
         write("albertogarcia@gmail.com");
-        clickOn("#txtName");
+        clickOn("#SignUpTxtName");
         write("Alberto García");
-        clickOn("#btnSignUp");
+        clickOn("#SignUpBtnSignUp");
         verifyThat("The passwords don´t match.\n", isVisible());
         clickOn("Aceptar");
     }
@@ -185,17 +191,17 @@ public class SignUpControllerTest extends ApplicationTest {
      */
     @Test
     public void testH_EmailWrong() {
-        clickOn("#txtUser");
+        clickOn("#SignUpTxtUser");
         write("Alberto");
-        clickOn("#txtPass");
+        clickOn("#SignUpTxtPass");
         write("Alberto!Garcia8");
-        clickOn("#txtPassAgain");
+        clickOn("#SignUpTxtPassAgain");
         write("Alberto!Garcia8");
-        clickOn("#txtEmail");
+        clickOn("#SignUpTxtEmail");
         write("albertogarciagmailcom");
-        clickOn("#txtName");
+        clickOn("#SignUpTxtName");
         write("Alberto García");
-        clickOn("#btnSignUp");
+        clickOn("#SignUpBtnSignUp");
         verifyThat("The email format is not valid.\n", isVisible());
         clickOn("Aceptar");
     }
@@ -205,18 +211,18 @@ public class SignUpControllerTest extends ApplicationTest {
      */
     @Test
     public void testI_SignUpButtonChanged() {
-        clickOn("#txtUser");
+        clickOn("#SignUpTxtUser");
         write("Alberto");
-        clickOn("#txtPass");
+        clickOn("#SignUpTxtPass");
         write("Alberto!Garcia8");
-        clickOn("#txtPassAgain");
+        clickOn("#SignUpTxtPassAgain");
         write("Alberto!Garcia8");
-        clickOn("#txtEmail");
+        clickOn("#SignUpTxtEmail");
         write("albertogarcia@gmail.com");
-        clickOn("#txtName");
+        clickOn("#SignUpTxtName");
         write("Alberto García");
-        clickOn("#btnSignUp");
-        verifyThat("#btnSignUp", isEnabled());
+        clickOn("#SignUpBtnSignUp");
+        verifyThat("#SignUpBtnSignUp", isEnabled());
         clickOn("Aceptar");
     }
 
@@ -226,7 +232,7 @@ public class SignUpControllerTest extends ApplicationTest {
      */
     @Test
     public void testJ_btnBackOK() {
-        clickOn("#btnBack");
+        clickOn("#SignUpBtnBack");
         verifyThat("#windowSignIn", isVisible());
     }
 

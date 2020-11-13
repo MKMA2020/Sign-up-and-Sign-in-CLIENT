@@ -37,7 +37,7 @@ public class SignInController {
      * The stage itself
      */
     @FXML
-    private Stage stage;
+    private Stage stageSignIn;
     /**
      * Textfield for the user
      */
@@ -57,7 +57,7 @@ public class SignInController {
      * Button to go to the sign up
      */
     @FXML
-    private Button btnSignUp;
+    private Button SignInbtnSignUp;
 
     /**
      * This method gets launched whenever the user hits the login button In case
@@ -100,7 +100,7 @@ public class SignInController {
             Signable signable = factory.getSignable();
             try {
                 user = signable.signIn(user);
-                openWindow(stage, user);
+                openLogOutWindow(user);
             } catch (UserNotFoundException | PassNotCorrectException ex) {
                 alertNeeded = true;
                 alertError = "User or password are incorrect.";
@@ -128,7 +128,13 @@ public class SignInController {
 
     @FXML
     private void handleButtonSignUp(ActionEvent event) throws IOException {
-        start_signup(stage);
+        Stage stageSignUp = new Stage();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("SignUp.fxml"));
+        Parent root = (Parent) loader.load();
+        SignUpController controller = (loader.getController());
+        controller.seStageSignUp(stageSignUp);
+        controller.initStage(root);
+        stageSignIn.close();
     }
 
     /**
@@ -136,16 +142,16 @@ public class SignInController {
      *
      * @return returns the stage
      */
-    public Stage getStage() {
-        return stage;
+    public Stage getStageSignIn() {
+        return stageSignIn;
     }
+    
     /**
      * Method that sets the stage
      * @param stage Stage used
      */
-
-    public void setStage(Stage stage) {
-        this.stage = stage;
+    public void setStageSignIn(Stage stage) {
+        this.stageSignIn = stage;
     }
 
     /**
@@ -153,16 +159,15 @@ public class SignInController {
      *
      * @param root Parent of the window
      */
-
     public void initStage(Parent root) {
         Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.setResizable(false);
-        stage.setTitle("Sign In");
+        stageSignIn.setScene(scene);
+        stageSignIn.setResizable(false);
+        stageSignIn.setTitle("Sign In");
         handleWindowShowing();
         txtUser.textProperty().addListener((this::textchanged));
         txtPass.textProperty().addListener((this::textchanged));
-        stage.show();
+        stageSignIn.show();
 
     }
 
@@ -170,12 +175,11 @@ public class SignInController {
      * When the window's first launched, sets the logIn button to disabled and
      * adds 2 tooltips.
      */
-
     private void handleWindowShowing() {
         txtUser.setText("");
         txtPass.setText("");
         btnSignIn.setDisable(true);
-        btnSignUp.setTooltip(new Tooltip("Click to sign up!"));
+        SignInbtnSignUp.setTooltip(new Tooltip("Click to sign up!"));
         btnSignIn.setTooltip(new Tooltip("Click to log in!"));
 
     }
@@ -186,7 +190,6 @@ public class SignInController {
      *
      * @param obv parameter used to observe the text fields.
      */
-
     private void textchanged(Observable obv) {
 
         if (this.txtUser.getText().trim().equals("") || this.txtPass.getText().trim().equals("")) {
@@ -198,21 +201,6 @@ public class SignInController {
     }
 
     /**
-     * Method to invoke the signup window
-     *
-     * @param primaryStage Main stage
-     * @throws IOException IO issues
-     */
-
-    private void start_signup(Stage primaryStage) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("SignUp.fxml"));
-        Parent root = (Parent) loader.load();
-        SignUpController controller = (loader.getController());
-        controller.setStage(primaryStage);
-        controller.initStage(root);
-    }
-
-    /**
      * Launches the main window
      *
      * @param primaryStage Main stage
@@ -220,13 +208,14 @@ public class SignInController {
      * @param user user used
      * @throws IOException IO issue
      */
-    private void openWindow(Stage logOutStage, User user) throws IOException {
+    private void openLogOutWindow(User user) throws IOException {
+        Stage stageLogOut = new Stage();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("SignOut.fxml"));
         Parent root = (Parent) loader.load();
-
         LogOutController controller = (loader.getController());
         controller.setUsername(user);
-        controller.setStage(logOutStage);
+        controller.setStageLogOut(stageLogOut);
         controller.initStage(root);
+        stageSignIn.close();
     }
 }

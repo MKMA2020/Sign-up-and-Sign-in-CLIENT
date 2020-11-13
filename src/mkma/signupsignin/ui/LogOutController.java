@@ -23,7 +23,7 @@ import user_message.User;
 public class LogOutController implements Initializable {
 
     @FXML
-    private Stage stage;
+    private Stage stageLogOut;
     @FXML
     private Button btnClose;
     @FXML
@@ -36,21 +36,23 @@ public class LogOutController implements Initializable {
      */
 
     private void handleButtonClose(ActionEvent event) throws IOException {
+        Stage stageSignIn = new Stage();
         //It gets the FXML of the sign-in window
         FXMLLoader loader = new FXMLLoader(getClass().getResource("SignIn.fxml"));
         Parent root = (Parent) loader.load();
         //It creates a controller for the window and runs it
         SignInController controller = (loader.getController());
-        controller.setStage(stage);
+        controller.setStageSignIn(stageSignIn);
         controller.initStage(root);
+        stageLogOut.close();
     }
 
-    public Stage getStage() {
-        return stage;
+    public Stage getStageLogOut() {
+        return stageLogOut;
     }
 
-    public void setStage(Stage stage) {
-        this.stage = stage;
+    public void setStageLogOut(Stage stageLogOut) {
+        this.stageLogOut = stageLogOut;
     }
 
     /**
@@ -60,10 +62,10 @@ public class LogOutController implements Initializable {
      */
     public void initStage(Parent root) {
         Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.setTitle("Sign In");
-        stage.setResizable(false);
-        stage.show();
+        stageLogOut.setScene(scene);
+        stageLogOut.setTitle("Log Out");
+        stageLogOut.setResizable(false);
+        stageLogOut.show();
 
     }
 

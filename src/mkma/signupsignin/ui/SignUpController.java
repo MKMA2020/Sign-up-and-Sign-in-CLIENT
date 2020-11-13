@@ -23,6 +23,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import mkma.signupsignin.signable.SignableFactory;
 import signable.Signable;
 import user_message.User;
@@ -39,60 +40,57 @@ public class SignUpController {
      * The stage that is going to be shown
      */
     @FXML
-    private Stage stage;
+    private Stage stageSignUp;
     /**
      * Text field to enter the user
      */
     @FXML
-    private TextField txtUser;
+    private TextField SignUpTxtUser;
     /**
      * Text field to enter the password
      */
     @FXML
-    private PasswordField txtPass;
+    private PasswordField SignUpTxtPass;
     /**
      * Text field to repeat the password
      */
     @FXML
-    private PasswordField txtPassAgain;
+    private PasswordField SignUpTxtPassAgain;
     /**
      * Text field to enter the email
      */
     @FXML
-    private TextField txtEmail;
+    private TextField SignUpTxtEmail;
     /**
      * Text field to enter the name of the user
      */
     @FXML
-    private TextField txtName;
+    private TextField SignUpTxtName;
     /**
      * Button to sign in the user
      */
     @FXML
-    private Button btnSignUp;
+    private Button SignUpBtnSignUp;
     /**
      * Button to go back to the sign in window
      */
     @FXML
-    private Button btnBack;
-    /*
-     * Button that closes the window 
-     */
-    @FXML
-    private Button closeButton;
+    private Button SignUpBtnBack;
 
     @FXML
-    public void exitApplication(ActionEvent event) throws IOException {
-        // get a handle to the stage
-        Stage stage = (Stage) closeButton.getScene().getWindow();
-        // do what you have to do
-        //It gets the FXML of the sign-in window
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("SignIn.fxml"));
-        Parent root = (Parent) loader.load();
-        //It creates a controller for the window and runs it
-        SignInController controller = (loader.getController());
-        controller.setStage(stage);
-        controller.initStage(root);
+    public void setOnCloseRequest(WindowEvent event) {
+        Stage stageSignIn = new Stage();
+        try {
+            //It gets the FXML of the sign-in window
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("SignIn.fxml"));
+            Parent root = (Parent) loader.load();
+            //It creates a controller for the window and runs it
+            SignInController controller = (loader.getController());
+            controller.setStageSignIn(stageSignIn);
+            controller.initStage(root);
+        } catch (IOException ex) {
+            Logger.getLogger(SignUpController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -113,10 +111,10 @@ public class SignUpController {
             // Create user
             User user = new User();
             // Set data from text fields to user
-            user.setLogin(txtUser.getText());
-            user.setPassword(txtPass.getText());
-            user.setEmail(txtEmail.getText());
-            user.setFullName(txtName.getText());
+            user.setLogin(SignUpTxtUser.getText());
+            user.setPassword(SignUpTxtPass.getText());
+            user.setEmail(SignUpTxtEmail.getText());
+            user.setFullName(SignUpTxtName.getText());
             // Get a new signable Object
             SignableFactory factory = new SignableFactory();
             Signable signable = factory.getSignable();
@@ -124,8 +122,8 @@ public class SignUpController {
                 // Call signUp method on Signable
                 User received = signable.signUp(user);
                 // If no exception continue
-                btnSignUp.setText("Signed Up");
-                btnSignUp.setDisable(true);
+                SignUpBtnSignUp.setText("Signed Up");
+                SignUpBtnSignUp.setDisable(true);
 
 // MODIFICACION DIN
 
@@ -133,13 +131,16 @@ public class SignUpController {
                 Alert exceptionAlert = new Alert(AlertType.CONFIRMATION,
                         "User succesfully created", ButtonType.OK);
                 exceptionAlert.showAndWait();
+                Stage stageSignIn = new Stage();
                 // Get FXML of the sign-in window
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("SignIn.fxml"));
                 Parent root = (Parent) loader.load();
                 // Create a controller for the window and run
                 SignInController controller = (loader.getController());
-                controller.setStage(stage);
+                controller.setStageSignIn(stageSignIn);
                 controller.initStage(root);
+                controller.getStageSignIn().show();
+                stageSignUp.close();
 
 // FIN MODIFICACION DIN
 
@@ -171,6 +172,7 @@ public class SignUpController {
      */
     @FXML
     private void handleButtonBack(ActionEvent event) throws IOException {
+        Stage stageSignIn = new Stage();
         // Back button pressed logger
         Logger.getLogger(SignUpController.class
                 .getName()).log(Level.INFO, "Back Button Clicked, Opening: SignInWindow");
@@ -179,8 +181,9 @@ public class SignUpController {
         Parent root = (Parent) loader.load();
         // Create a controller for the window and run
         SignInController controller = (loader.getController());
-        controller.setStage(stage);
+        controller.setStageSignIn(stageSignIn);
         controller.initStage(root);
+        stageSignUp.close();
     }
 
     /**
@@ -188,8 +191,8 @@ public class SignUpController {
      *
      * @return the stage needed
      */
-    public Stage getStage() {
-        return stage;
+    public Stage getStageSignUp() {
+        return stageSignUp;
     }
 
     /**
@@ -197,8 +200,8 @@ public class SignUpController {
      *
      * @param stage the stage needed
      */
-    public void setStage(Stage stage) {
-        this.stage = stage;
+    public void seStageSignUp(Stage stageSignUp) {
+        this.stageSignUp = stageSignUp;
     }
 
     /**
@@ -208,19 +211,20 @@ public class SignUpController {
      */
     public void initStage(Parent root) {
         Scene scene = new Scene(root, 691, 405);
-        stage.setTitle("Sign-up");
-        stage.setResizable(false);
-        stage.setScene(scene);
+        stageSignUp.setTitle("Sign-up");
+        stageSignUp.setResizable(false);
+        stageSignUp.setScene(scene);
         // Set text fields empty
-        txtUser.setText("");
-        txtPass.setText("");
-        txtPassAgain.setText("");
-        txtEmail.setText("");
-        txtName.setText("");
+        SignUpTxtUser.setText("");
+        SignUpTxtPass.setText("");
+        SignUpTxtPassAgain.setText("");
+        SignUpTxtEmail.setText("");
+        SignUpTxtName.setText("");
 
         // Call method that handles how the elements show up
         handleWindowShowing();
-        stage.show();
+        stageSignUp.show();
+        stageSignUp.setOnCloseRequest(this::setOnCloseRequest);
     }
 
     /**
@@ -229,26 +233,26 @@ public class SignUpController {
      */
     private void handleWindowShowing() {
         //It disables the signup button
-        btnSignUp.setDisable(true);
+        SignUpBtnSignUp.setDisable(true);
 
         //It sets tooltips in the buttons and text fields, to tell the user about them
-        btnSignUp.setTooltip(new Tooltip("Click to create an user "
+        SignUpBtnSignUp.setTooltip(new Tooltip("Click to create an user "
                 + "with this credentials"));
-        btnBack.setTooltip(new Tooltip("Click to go back "
+        SignUpBtnBack.setTooltip(new Tooltip("Click to go back "
                 + "to the login"));
-        txtUser.setTooltip(new Tooltip("Between 5 and 20 characters"));
-        txtPass.setTooltip(new Tooltip("Contains lower-case, "
+        SignUpTxtUser.setTooltip(new Tooltip("Between 5 and 20 characters"));
+        SignUpTxtPass.setTooltip(new Tooltip("Contains lower-case, "
                 + "upper-case and numbers"));
-        txtPassAgain.setTooltip(new Tooltip("Repeat password"));
-        txtEmail.setTooltip(new Tooltip("Valid format e-mail"));
-        txtName.setTooltip(new Tooltip("Write your name and surname"));
+        SignUpTxtPassAgain.setTooltip(new Tooltip("Repeat password"));
+        SignUpTxtEmail.setTooltip(new Tooltip("Valid format e-mail"));
+        SignUpTxtName.setTooltip(new Tooltip("Write your name and surname"));
 
         //It sets listeners to the text fields with a method that checks if they are empty
-        txtUser.textProperty().addListener(this::textChanged);
-        txtPass.textProperty().addListener(this::textChanged);
-        txtPassAgain.textProperty().addListener(this::textChanged);
-        txtEmail.textProperty().addListener(this::textChanged);
-        txtName.textProperty().addListener(this::textChanged);
+        SignUpTxtUser.textProperty().addListener(this::textChanged);
+        SignUpTxtPass.textProperty().addListener(this::textChanged);
+        SignUpTxtPassAgain.textProperty().addListener(this::textChanged);
+        SignUpTxtEmail.textProperty().addListener(this::textChanged);
+        SignUpTxtName.textProperty().addListener(this::textChanged);
     }
 
     /**
@@ -263,32 +267,32 @@ public class SignUpController {
         boolean error = false;
         String alertList = "";
         //Checks if the user is long enough
-        if (txtUser.getText().length() < 5) {
+        if (SignUpTxtUser.getText().length() < 5) {
             error = true;
             alertList = alertList.concat("The username is too short.\n");
         }
         //Checks if the user is too long
-        if (txtUser.getText().length() > 20) {
+        if (SignUpTxtUser.getText().length() > 20) {
             error = true;
             alertList = alertList.concat("The username is too long.\n");
         }
         //Checks if the password meets the requirements
-        if (isValidPass(txtPass.getText()) == false) {
+        if (isValidPass(SignUpTxtPass.getText()) == false) {
             error = true;
             alertList = alertList.concat("The password has to contain\nat least an upper-case,\nlower-case and a number.\n");
         }
         //Checks if the password is too short 
-        if (txtPass.getText().length() < 5) {
+        if (SignUpTxtPass.getText().length() < 5) {
             error = true;
             alertList = alertList.concat("The password is too short.\n");
         }
         //Checks if the password and its confirmation are the same
-        if (!txtPass.getText().equals(txtPassAgain.getText())) {
+        if (!SignUpTxtPass.getText().equals(SignUpTxtPassAgain.getText())) {
             error = true;
             alertList = alertList.concat("The passwords don´t match.\n");
         }
         //Checks if the email has a valid format
-        if (!isValidEmail(txtEmail.getText())) {
+        if (!isValidEmail(SignUpTxtEmail.getText())) {
             error = true;
             alertList = alertList.concat("The email format is not valid.\n");
         }
@@ -354,14 +358,14 @@ public class SignUpController {
      */
     private void textChanged(Observable observable) {
         // If all buttons contain text
-        if (txtUser.getText().trim().equals("") || txtPass.getText().trim().equals("")
-                || txtPassAgain.getText().trim().equals("") || txtEmail.getText().trim().equals("")
-                || txtName.getText().trim().equals("")) {
-            // Set btnSignUp to enabled
-            btnSignUp.setDisable(true);
+        if (SignUpTxtUser.getText().trim().equals("") || SignUpTxtPass.getText().trim().equals("")
+                || SignUpTxtPassAgain.getText().trim().equals("") || SignUpTxtEmail.getText().trim().equals("")
+                || SignUpTxtName.getText().trim().equals("")) {
+            // Set SignUpBtnSignUp to enabled
+            SignUpBtnSignUp.setDisable(true);
         } else {
-            // Set btnSignUp to disabled
-            btnSignUp.setDisable(false);
+            // Set SignUpBtnSignUp to disabled
+            SignUpBtnSignUp.setDisable(false);
         }
     }
 }
