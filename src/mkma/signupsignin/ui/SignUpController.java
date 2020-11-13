@@ -1,11 +1,9 @@
 package mkma.signupsignin.ui;
 
 import exceptions.DataBaseConnectionException;
-import exceptions.PassNotCorrectException;
 import exceptions.ServerErrorException;
 import exceptions.TimeOutException;
 import exceptions.UserExistsException;
-import exceptions.UserNotFoundException;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -15,7 +13,6 @@ import javafx.beans.Observable;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -48,12 +45,12 @@ public class SignUpController {
      * Text field to enter the user
      */
     @FXML
-    private TextField txtUser;
+    private TextField txtUserRegister;
     /**
      * Text field to enter the password
      */
     @FXML
-    private PasswordField txtPass;
+    private PasswordField txtPassRegister;
     /**
      * Text field to repeat the password
      */
@@ -73,7 +70,7 @@ public class SignUpController {
      * Button to sign in the user
      */
     @FXML
-    private Button btnSignUp;
+    private Button btnSignUpRegister;
     /**
      * Button to go back to the sign in window
      */
@@ -97,10 +94,10 @@ public class SignUpController {
         String alertError = null;
         boolean alertNeeded = false;
         if (!error) {
-            LOG.log(Level.INFO, "Sign up attempt by user " + txtUser.getText());
+            LOG.log(Level.INFO, "Sign up attempt by user " + txtUserRegister.getText());
             User user = new User();
-            user.setLogin(txtUser.getText());
-            user.setPassword(txtPass.getText());
+            user.setLogin(txtUserRegister.getText());
+            user.setPassword(txtPassRegister.getText());
             user.setEmail(txtEmail.getText());
             user.setFullName(txtName.getText());
             SignableFactory factory = new SignableFactory();
@@ -108,8 +105,8 @@ public class SignUpController {
             try {
                 User received = signable.signUp(user);
                 LOG.log(Level.INFO, "User " + user.getLogin() + " registered.");
-                btnSignUp.setText("Signed Up");
-                btnSignUp.setDisable(true);
+                btnSignUpRegister.setText("Signed Up");
+                btnSignUpRegister.setDisable(true);
             } catch (DataBaseConnectionException | ServerErrorException | TimeOutException ex) {
                 LOG.log(Level.INFO, "Server exception catched.");
                 alertNeeded = true;
@@ -174,8 +171,8 @@ public class SignUpController {
         stage.setResizable(false);
         stage.setScene(scene);
         //It sets listeners to the text fields with a method that checks if they are empty
-        txtUser.textProperty().addListener(this::textChanged);
-        txtPass.textProperty().addListener(this::textChanged);
+        txtUserRegister.textProperty().addListener(this::textChanged);
+        txtPassRegister.textProperty().addListener(this::textChanged);
         txtPassAgain.textProperty().addListener(this::textChanged);
         txtEmail.textProperty().addListener(this::textChanged);
         txtName.textProperty().addListener(this::textChanged);
@@ -188,25 +185,25 @@ public class SignUpController {
      * Method used to set various additions to the elements, like tooltip
      * buttons, or addition of listeners.
      *
-     * @param the event executed
+     * @param event the event executed
      */
     private void handleWindowShowing(Event event) {
         //It disables the signup button
-        btnSignUp.setDisable(true);
+        btnSignUpRegister.setDisable(true);
         //It resets the content of the text fields
-        txtUser.setText("");
-        txtPass.setText("");
+        txtUserRegister.setText("");
+        txtPassRegister.setText("");
         txtPassAgain.setText("");
         txtEmail.setText("");
         txtName.setText("");
 
         //It sets tooltips in the buttons and text fields, to tell the user about them
-        btnSignUp.setTooltip(new Tooltip("Click to create an user "
+        btnSignUpRegister.setTooltip(new Tooltip("Click to create an user "
                 + "with this credentials"));
         btnBack.setTooltip(new Tooltip("Click to go back "
                 + "to the login"));
-        txtUser.setTooltip(new Tooltip("Between 5 and 20 characters"));
-        txtPass.setTooltip(new Tooltip("Contains lower-case, "
+        txtUserRegister.setTooltip(new Tooltip("Between 5 and 20 characters"));
+        txtPassRegister.setTooltip(new Tooltip("Contains lower-case, "
                 + "upper-case and numbers"));
         txtPassAgain.setTooltip(new Tooltip("Repeat password"));
         txtEmail.setTooltip(new Tooltip("Valid format e-mail"));
@@ -225,27 +222,27 @@ public class SignUpController {
         boolean error = false;
         String alertList = "";
         //Checks if the user is long enough
-        if (txtUser.getText().length() < 5) {
+        if (txtUserRegister.getText().length() < 5) {
             error = true;
             alertList = alertList.concat("The username is too short.\n");
         }
         //Checks if the user is too long
-        if (txtUser.getText().length() > 20) {
+        if (txtUserRegister.getText().length() > 20) {
             error = true;
             alertList = alertList.concat("The username is too long.\n");
         }
         //Checks if the password meets the requirements
-        if (isValidPass(txtPass.getText()) == false) {
+        if (isValidPass(txtPassRegister.getText()) == false) {
             error = true;
             alertList = alertList.concat("The password needs to contain at least an upper-case, lower-case and a number.\n");
         }
         //Checks if the password is too short
-        if (txtPass.getText().length() < 5) {
+        if (txtPassRegister.getText().length() < 5) {
             error = true;
             alertList = alertList.concat("The password is too short.\n");
         }
         //Checks if the password and its confirmation are the same
-        if (!txtPass.getText().equals(txtPassAgain.getText())) {
+        if (!txtPassRegister.getText().equals(txtPassAgain.getText())) {
             error = true;
             alertList = alertList.concat("The passwords don´t match.\n");
         }
@@ -315,12 +312,12 @@ public class SignUpController {
      * observed
      */
     private void textChanged(Observable observable) {
-        if (txtUser.getText().trim().equals("") || txtPass.getText().trim().equals("")
+        if (txtUserRegister.getText().trim().equals("") || txtPassRegister.getText().trim().equals("")
                 || txtPassAgain.getText().trim().equals("") || txtEmail.getText().trim().equals("")
                 || txtName.getText().trim().equals("")) {
-            btnSignUp.setDisable(true);
+            btnSignUpRegister.setDisable(true);
         } else {
-            btnSignUp.setDisable(false);
+            btnSignUpRegister.setDisable(false);
         }
     }
 }

@@ -98,7 +98,7 @@ public class SignableImplementation implements Signable {
             worker.start();
             worker.join();
             received = worker.getReceived();
-
+            try {
             switch (received.getMessageType()) {
 
                 case DATABASEERROR:
@@ -111,6 +111,9 @@ public class SignableImplementation implements Signable {
                     throw new UserExistsException();
                 default:
                     break;
+            }
+            } catch (NullPointerException ex) {
+                throw new TimeOutException();
             }
 
         } catch (InterruptedException ex) {

@@ -181,7 +181,7 @@ public class SignInController {
      * When the window's first launched, sets the logIn button to disabled and
      * adds 2 tooltips.
      *
-     * @param the event executed
+     * @param event the event executed
      */
     private void handleWindowShowing(Event event) {
         txtUser.setText("");
@@ -224,8 +224,7 @@ public class SignInController {
 
     /**
      * Launches the main window
-     *
-     * @param primaryStage Main stage
+     * 
      * @param logOutStage Stage for the log out window
      * @param user user used
      * @throws IOException IO issue
