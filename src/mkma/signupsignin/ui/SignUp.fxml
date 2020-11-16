@@ -9,7 +9,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane fx:id="windowSignUp" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="405.0" prefWidth="691.0" style="-fx-background-color: #0f1120;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mkma.signupsignin.ui.SignUpController">
+<AnchorPane fx:id="windowSignUp" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="405.0" prefWidth="691.0" style="-fx-background-color: #0f1120;" stylesheets="@customCSS.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mkma.signupsignin.ui.SignUpController">
    <children>
       <AnchorPane layoutX="196.0" layoutY="67.0" prefHeight="266.0" prefWidth="308.0" style="-fx-background-color: #272d54;" AnchorPane.bottomAnchor="67.0" AnchorPane.leftAnchor="196.0" AnchorPane.rightAnchor="196.0" AnchorPane.topAnchor="67.0">
          <children>
@@ -26,7 +26,7 @@
             <Button fx:id="btnSignUpRegister" layoutX="54.0" layoutY="227.0" mnemonicParsing="false" onAction="#handleButtonSignUp" prefHeight="25.0" prefWidth="202.0" style="-fx-background-color: #3f4988;" text="Sign up" textFill="#909090" />
          </children>
       </AnchorPane>
-      <Button fx:id="btnBack" layoutX="276.0" layoutY="361.0" mnemonicParsing="false" onAction="#handleButtonBack" prefHeight="25.0" prefWidth="149.0" style="-fx-background-color: #3f4988;" text="Go back" textFill="#909090" AnchorPane.leftAnchor="276.0" AnchorPane.rightAnchor="275.0" />
+      <Button fx:id="SignUpBtnBack" layoutX="276.0" layoutY="361.0" mnemonicParsing="false" onAction="#handleButtonBack" prefHeight="25.0" prefWidth="149.0" style="-fx-background-color: #3f4988;" text="Go back" textFill="#909090" AnchorPane.leftAnchor="276.0" AnchorPane.rightAnchor="275.0" />
       <ImageView fx:id="imgLogo1" fitHeight="152.0" fitWidth="193.0" layoutY="248.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../resources/MKMALogo.png" />

@@ -1,0 +1,9 @@
+/*
+    Aplicar una CSS a los botones que permita visualizar el foco con el estilo
+    elegido en la ventana SignUp.
+    Author: Martin Valiente Ainz
+*/
+.button:focused {
+    -fx-border-color: red;
+    -fx-border-radius: 3 3 3 3;
+}

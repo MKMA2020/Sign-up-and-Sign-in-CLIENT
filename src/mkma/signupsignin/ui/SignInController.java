@@ -1,4 +1,3 @@
-
 package mkma.signupsignin.ui;
 
 import exceptions.DataBaseConnectionException;

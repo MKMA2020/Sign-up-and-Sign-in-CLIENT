@@ -29,7 +29,7 @@ public class App extends Application {
         Parent root = (Parent) loader.load();
 
         SignInController controller = (loader.getController());
-        controller.setStage(primaryStage);
+        controller.setStageSignIn(primaryStage);
         controller.initStage(root);
     }
 

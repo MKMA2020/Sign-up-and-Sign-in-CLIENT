@@ -61,34 +61,13 @@ public class Worker extends Thread {
             Logger.getLogger(Worker.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
-                try {
-                    entry.close();
-                } catch (IOException ex) {
-                    System.out.println(ex.getMessage());
-                }
-                try {
-                    input.close();
-                } catch (IOException ex) {
-                    System.out.println(ex.getMessage());
-                }
-                try {
-                    objectOutputStream.close();
-                } catch (IOException ex) {
-                    System.out.println(ex.getMessage());
-                }
-                try {
-                    outputStream.close();
-                } catch (IOException ex) {
-                    System.out.println(ex.getMessage());
-                }
-                try {
-                    socket.close();
-                } catch (IOException ex) {
-                    System.out.println(ex.getMessage());
-                }
-
-            } catch (NullPointerException ex) {
-                Logger.getLogger(Worker.class.getName()).log(Level.SEVERE, "Connection failed");
+                entry.close();
+                input.close();
+                objectOutputStream.close();
+                outputStream.close();
+                socket.close();
+            } catch (NullPointerException | IOException ex) {
+                Logger.getLogger(Worker.class.getName()).log(Level.SEVERE, "Conenction Failed");
             }
         }
     }
