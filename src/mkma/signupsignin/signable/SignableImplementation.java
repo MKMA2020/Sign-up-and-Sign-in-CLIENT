@@ -70,6 +70,8 @@ public class SignableImplementation implements Signable {
 
         } catch (InterruptedException ex) {
             Logger.getLogger(SignableImplementation.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NullPointerException npex){
+            throw new DataBaseConnectionException();
         }
 
         return received.getUser();
@@ -128,7 +130,6 @@ public class SignableImplementation implements Signable {
      */
     @Override
     public User signOut(User user) {
-
         return user;
 
     }

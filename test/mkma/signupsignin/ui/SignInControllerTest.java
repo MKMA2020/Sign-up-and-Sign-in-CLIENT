@@ -5,18 +5,14 @@
  */
 package mkma.signupsignin.ui;
 
-import java.util.concurrent.TimeoutException;
 import javafx.stage.Stage;
 import mkma.signupsignin.application.App;
-import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import static org.testfx.api.FxAssert.verifyThat;
-import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit.ApplicationTest;
-import static org.testfx.matcher.base.NodeMatchers.anything;
 import static org.testfx.matcher.base.NodeMatchers.isDisabled;
 import static org.testfx.matcher.base.NodeMatchers.isEnabled;
 import static org.testfx.matcher.base.NodeMatchers.isVisible;
@@ -38,18 +34,11 @@ public class SignInControllerTest extends ApplicationTest{
     @Override
     public void stop(){}
     
-    /*@BeforeClass
-    public static void setUpClass() throws TimeoutException {
-        
-        FxToolkit.registerPrimaryStage();
-        FxToolkit.setupApplication(App.class);
-   }
-    */
     /**
      * Method that checks that the initial characteristics of the window are correct.
      */
     @Test
-    public void TestA_initislstate() {
+    public void testA_initislstate() {
         verifyThat("#txtUser", hasText(""));
         verifyThat("#txtPass", hasText(""));
         verifyThat("#btnSignIn", isDisabled());
@@ -93,8 +82,8 @@ public class SignInControllerTest extends ApplicationTest{
         clickOn("#txtPass");
         write("validpassword");
         clickOn("#btnSignIn");
-        verifyThat("#alertlongUser",anything());        
-        clickOn("#btnOkL");
+        verifyThat("Username is too long",isVisible());        
+        clickOn("Aceptar");
    }
    
    /**
@@ -107,15 +96,14 @@ public class SignInControllerTest extends ApplicationTest{
         clickOn("#txtPass");
         write("validpassword");
         clickOn("#btnSignIn");
-        verifyThat("#alertShortUser",anything());
-        clickOn("#btnOkS");
+        verifyThat("Username is too short",isVisible());
+        clickOn("Aceptar");
    }
-   
     
    /**
     * Method that checks if an alert pops up when a username that is too long is introduced, in case the program couldn't take it.
     */
-   /*
+   @Ignore
    @Test
    public void TestF_userComicallyLong() {
        clickOn("#txtUser");
@@ -124,78 +112,76 @@ public class SignInControllerTest extends ApplicationTest{
         write("validpassword");
         clickOn("#btnSignIn");
         verifyThat("Username is too long",isVisible());        
-        clickOn("#btnOkL");
+        clickOn("Aceptar");
    }
-   */
    
    /**
     * Method that checks if the program crashes when a password that is too long is introduced, in case the program couldn't take it.
     */
-   /*
-   @Test
    @Ignore
+   @Test
    public void TestG_passComicallyLong() {
        clickOn("#txtUser");
         write("validusername");
         clickOn("#txtPass");
         write("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
         clickOn("#btnSignIn");
-        verifyThat("User or password are incorrect.",isVisible());
-        clickOn("#btnOkH");
-        
+        verifyThat("User or password are incorrect.", isVisible());
+        clickOn("Aceptar");
    }
-   */
-   /**
-    * Method that introduces the wrong login but the right password.
-    */
-   @Test
-    public void TestH_SigningIn(){
-        clickOn("#txtUser");
-        write("martinWrong");
-        clickOn("#txtPass");
-        write("Aa123");
-        clickOn("#btnSignIn");
-        verifyThat("User or password are incorrect.",isVisible());
-        clickOn("#btnOkH");
-        
-    }
-    /**
-    * Method that introduces the right login but the wrong password.
-    */
-   @Test
-    public void TestI_SigningIn(){
-        clickOn("#txtUser");
-        write("martinG");
-        clickOn("#txtPass");
-        write("Aa123");
-        clickOn("#btnSignIn");
-        verifyThat("User or password are incorrect.",isVisible());        
-        clickOn("#btnOkH");
-    }
    
    /**
     * Method that introduces correct login information and checks if the next window loads.
     */
    @Test
-    public void TestJ_SigningIn(){
+    public void TestH_SigningIn(){
         clickOn("#txtUser");
-        write("martinG");
+        write("kerman");
         clickOn("#txtPass");
-        write("Aa1234");
+        write("1Aqwe");
         clickOn("#btnSignIn");
         verifyThat("#windowSignOut", isVisible());
     }
+    
     /**
-    * Method for when the server is off.
+    * Method that introduces a non-existent username and then checks if there is an error.
     */
    @Test
-    public void TestK_SigningIn(){
+    public void TestI_UserNotExists(){
         clickOn("#txtUser");
-        write("martinG");
+        write("nonvaliduser");
         clickOn("#txtPass");
-        write("Aa1234");
+        write("unexistentpass");
         clickOn("#btnSignIn");
-        verifyThat("An unexpected error ocurred on the server.",isVisible());        
-        clickOn("#btnOkH");
+        verifyThat("User or password are incorrect.", isVisible());
+        clickOn("Aceptar");
+    }
+    
+    /**
+    * Method that introduces an incorrect password if there is an error.
+    */
+   @Test
+   public void TestJ_WrongPass(){
+       clickOn("#txtUser");
+       write("kerman");
+       clickOn("#txtPass");
+       write("wrongpass");
+       clickOn("#btnSignIn");
+       verifyThat("User or password are incorrect.", isVisible());
+       clickOn("Aceptar");
+   }
+    
+    /**
+     * Method that introduces information and then checks that it cannot connect to the server.
+     */
+    @Test
+    public void TestK_ServerError(){
+        clickOn("#txtUser");
+        write("kerman");
+        clickOn("#txtPass");
+        write("1Aqwe");
+        clickOn("#btnSignIn");
+        verifyThat("An unexpected error ocurred on the server.", isVisible());
+        clickOn("Aceptar");
     }
 }
