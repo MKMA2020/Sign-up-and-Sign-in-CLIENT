@@ -45,8 +45,9 @@ public class SignableImplementation implements Signable {
             Worker worker = new Worker(message);
             worker.start();
             worker.join();
-
+            try{
             received = worker.getReceived();
+            
 
             switch (received.getMessageType()) {
 
@@ -62,6 +63,9 @@ public class SignableImplementation implements Signable {
                     throw new UserNotFoundException();
                 default:
                     break;
+            }
+            }catch (NullPointerException ex) {
+                throw new TimeOutException();
             }
 
         } catch (InterruptedException ex) {

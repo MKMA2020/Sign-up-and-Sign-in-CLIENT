@@ -46,7 +46,9 @@ public class LogOutController implements Initializable {
         SignInController controller = (loader.getController());
         controller.setStage(stage);
         controller.initStage(root);
+      
         LOG.log(Level.INFO, "User successfully signed out.");
+
     }
 
     public Stage getStage() {

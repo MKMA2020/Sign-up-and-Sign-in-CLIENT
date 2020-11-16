@@ -126,7 +126,8 @@ public class SignInControllerTest extends ApplicationTest{
         clickOn("#txtPass");
         write("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
         clickOn("#btnSignIn");
-        
+        verifyThat("User or password are incorrect.", isVisible());
+        clickOn("Aceptar");
    }
    
    /**

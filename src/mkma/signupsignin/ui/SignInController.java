@@ -21,6 +21,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import mkma.signupsignin.signable.SignableFactory;
 import signable.Signable;
 import user_message.User;
@@ -33,6 +34,10 @@ import user_message.User;
  */
 public class SignInController {
 
+    /**
+     * Logger that will be use during the execution
+     */
+    final Logger LOG = Logger.getLogger("mkma.signupsignin.ui.SignInController.java");
     /**
      * The stage itself
      */
@@ -64,7 +69,7 @@ public class SignInController {
      * the username is either longer than 20 or shorther than 5 chars it will
      * send and alert. IF there is no error and everything goes through the
      * applicattions main window will be launched.
-     * 
+     *
      * @param event current event.
      * @throws IOException when there are input/output errors
      */
@@ -74,7 +79,7 @@ public class SignInController {
         boolean error = false;
         String alertError = null;
         boolean alertNeeded = false;
-        final Logger LOG = Logger.getLogger("mkma.signupsignin.ui.SignInController.java");
+
         LOG.log(Level.INFO, "Attempt to sign in");
 
         if (this.txtUser.getText().trim().length() < 5) {
@@ -120,6 +125,8 @@ public class SignInController {
             if (alertNeeded) {
                 Alert exceptionAlert = new Alert(Alert.AlertType.ERROR,
                         alertError, ButtonType.OK);
+                Button okButton = (Button) exceptionAlert.getDialogPane().lookupButton(ButtonType.OK);
+                okButton.setId("btnOkH");
                 exceptionAlert.showAndWait();
             }
 
@@ -133,7 +140,6 @@ public class SignInController {
      * @param event event used
      * @throws IOException when there are input/output errors.
      */
-
     @FXML
     private void handleButtonSignUp(ActionEvent event) throws IOException {
         start_signup(stage);
@@ -147,8 +153,10 @@ public class SignInController {
     public Stage getStage() {
         return stage;
     }
+
     /**
      * Method that sets the stage
+     *
      * @param stage Stage used
      */
 
@@ -161,22 +169,31 @@ public class SignInController {
      *
      * @param root Parent of the window
      */
-
     public void initStage(Parent root) {
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.setResizable(false);
         stage.setTitle("Sign In");
 
-        txtUser.setText("");
-        txtPass.setText("");
-        btnSignIn.setDisable(true);
-        btnSignUp.setTooltip(new Tooltip("Click to sign up!"));
-        btnSignIn.setTooltip(new Tooltip("Click to log in!"));
-        
+        stage.setOnShowing(this::handleWindowShowing);
         txtUser.textProperty().addListener((this::textchanged));
         txtPass.textProperty().addListener((this::textchanged));
         stage.show();
+
+    }
+
+    /**
+     * When the window's first launched, sets the logIn button to disabled and
+     * adds 2 tooltips.
+     * @param event The window.
+     */
+    private void handleWindowShowing(WindowEvent event) {
+        LOG.log(Level.INFO, "Window launched");
+        btnSignIn.setDisable(true);
+        txtUser.setText("");
+        txtPass.setText("");
+        btnSignUp.setTooltip(new Tooltip("Click to sign up!"));
+        btnSignIn.setTooltip(new Tooltip("Click to log in!"));
     }
 
     /**
@@ -185,7 +202,6 @@ public class SignInController {
      *
      * @param obv parameter used to observe the text fields.
      */
-
     private void textchanged(Observable obv) {
 
         if (this.txtUser.getText().trim().equals("") || this.txtPass.getText().trim().equals("")) {
@@ -202,7 +218,6 @@ public class SignInController {
      * @param primaryStage Main stage
      * @throws IOException IO issues
      */
-
     private void start_signup(Stage primaryStage) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("SignUp.fxml"));
         Parent root = (Parent) loader.load();
@@ -213,7 +228,6 @@ public class SignInController {
 
     /**
      * Launches the main window
-     *
      * @param logOutStage Stage for the log out window
      * @param user user used
      * @throws IOException IO issue
