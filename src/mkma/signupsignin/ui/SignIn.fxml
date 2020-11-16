@@ -33,6 +33,6 @@
             <Image url="@../resources/MKMALogo.png" />
          </image>
       </ImageView>
-      <Button fx:id="SignInbtnSignUp" layoutX="213.0" layoutY="354.0" mnemonicParsing="false" onAction="#handleButtonSignUp" prefHeight="25.0" prefWidth="277.0" style="-fx-background-color: #3f4988;" text="Don't have an account yet? Create one now!" textFill="#909090" />
+      <Button fx:id="btnSignUp" layoutX="192.5" layoutY="354.0" mnemonicParsing="false" onAction="#handleButtonSignUp" prefHeight="25.0" prefWidth="325.0" style="-fx-background-color: #3f4988;" text="Don't have an account yet? Create one now!..." textFill="#909090" />
    </children>
 </AnchorPane>

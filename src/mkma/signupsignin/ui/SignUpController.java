@@ -1,3 +1,4 @@
+
 package mkma.signupsignin.ui;
 
 import exceptions.DataBaseConnectionException;
@@ -11,8 +12,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javafx.beans.Observable;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -22,8 +23,8 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 import mkma.signupsignin.signable.SignableFactory;
 import signable.Signable;
 import user_message.User;
@@ -40,125 +41,83 @@ public class SignUpController {
      * The stage that is going to be shown
      */
     @FXML
-    private Stage stageSignUp;
+    private Stage stage;
     /**
      * Text field to enter the user
      */
     @FXML
-    private TextField SignUpTxtUser;
+    private TextField txtUserRegister;
     /**
      * Text field to enter the password
      */
     @FXML
-    private PasswordField SignUpTxtPass;
+    private PasswordField txtPassRegister;
     /**
      * Text field to repeat the password
      */
     @FXML
-    private PasswordField SignUpTxtPassAgain;
+    private PasswordField txtPassAgain;
     /**
      * Text field to enter the email
      */
     @FXML
-    private TextField SignUpTxtEmail;
+    private TextField txtEmail;
     /**
      * Text field to enter the name of the user
      */
     @FXML
-    private TextField SignUpTxtName;
+    private TextField txtName;
     /**
      * Button to sign in the user
      */
     @FXML
-    private Button SignUpBtnSignUp;
+    private Button btnSignUpRegister;
     /**
      * Button to go back to the sign in window
      */
     @FXML
-    private Button SignUpBtnBack;
-    
+    private Button btnBack;
     /**
-     * Method will close SignUp window and open SignIn window.
-     * @param event The event fired.
+     * The logger for the sign up
      */
-    @FXML
-    public void setOnCloseRequest(WindowEvent event) {
-        Stage stageSignIn = new Stage();
-        try {
-            //It gets the FXML of the sign-in window
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("SignIn.fxml"));
-            Parent root = (Parent) loader.load();
-            //It creates a controller for the window and runs it
-            SignInController controller = (loader.getController());
-            controller.setStageSignIn(stageSignIn);
-            controller.initStage(root);
-        } catch (IOException ex) {
-            Logger.getLogger(SignUpController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
+    static final Logger LOG = Logger.getLogger("mkma.signupsignin.ui.SignUpController.java");
 
     /**
      * Method that runs when you click the sign-up button. It calls the
      * validation method and if valid, it sends a user to the implementation.
      *
      * @param event it is the clicking event of the button
-     * @throws IOException when there is an input/output error
      */
     @FXML
-    private void handleButtonSignUp(ActionEvent event) throws IOException {
-        // Sign Up button clicked logger
-        Logger.getLogger(SignUpController.class.getName()).log(Level.INFO, "SignUp Button Clicked");
-        // Check if there are errors in the text fields
+    private void handleButtonSignUp(ActionEvent event) {
+        LOG.log(Level.INFO, "Sign up button clicked");
         boolean error = validate();
         String alertError = null;
         boolean alertNeeded = false;
         if (!error) {
-            // Create user
+            LOG.log(Level.INFO, "Sign up attempt by user " + txtUserRegister.getText());
             User user = new User();
-            // Set data from text fields to user
-            user.setLogin(SignUpTxtUser.getText());
-            user.setPassword(SignUpTxtPass.getText());
-            user.setEmail(SignUpTxtEmail.getText());
-            user.setFullName(SignUpTxtName.getText());
-            // Get a new signable Object
+            user.setLogin(txtUserRegister.getText());
+            user.setPassword(txtPassRegister.getText());
+            user.setEmail(txtEmail.getText());
+            user.setFullName(txtName.getText());
             SignableFactory factory = new SignableFactory();
             Signable signable = factory.getSignable();
             try {
-                // Call signUp method on Signable
                 User received = signable.signUp(user);
-                // If no exception continue
-                SignUpBtnSignUp.setText("Signed Up");
-                SignUpBtnSignUp.setDisable(true);
-
-// MODIFICACION DIN
-
-                // Show Alert all Okay
-                Alert exceptionAlert = new Alert(AlertType.CONFIRMATION,
-                        "User succesfully created", ButtonType.OK);
-                exceptionAlert.showAndWait();
-                Stage stageSignIn = new Stage();
-                // Get FXML of the sign-in window
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("SignIn.fxml"));
-                Parent root = (Parent) loader.load();
-                // Create a controller for the window and run
-                SignInController controller = (loader.getController());
-                controller.setStageSignIn(stageSignIn);
-                controller.initStage(root);
-                controller.getStageSignIn().show();
-                stageSignUp.close();
-
-// FIN MODIFICACION DIN
-
+                LOG.log(Level.INFO, "User " + user.getLogin() + " registered.");
+                btnSignUpRegister.setText("Signed Up");
+                btnSignUpRegister.setDisable(true);
             } catch (DataBaseConnectionException | ServerErrorException | TimeOutException ex) {
+                LOG.log(Level.INFO, "Server exception catched.");
                 alertNeeded = true;
-                // Message to be shown to user:
                 alertError = "An unexpected error ocurred on the server.";
             } catch (UserExistsException ex) {
+                LOG.log(Level.INFO, "User already exists");
                 alertNeeded = true;
-                // Message to be shown to user:
                 alertError = "The user you are trying to create already exists.";
             }
-            // Show error alert
+
             if (alertNeeded) {
                 Alert exceptionAlert = new Alert(AlertType.ERROR,
                         alertError, ButtonType.OK);
@@ -177,36 +136,26 @@ public class SignUpController {
      */
     @FXML
     private void handleButtonBack(ActionEvent event) throws IOException {
-        Stage stageSignIn = new Stage();
-        // Back button pressed logger
-        Logger.getLogger(SignUpController.class
-                .getName()).log(Level.INFO, "Back Button Clicked, Opening: SignInWindow");
-        // Get FXML ofthe sign-in window
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("SignIn.fxml"));
-        Parent root = (Parent) loader.load();
-        // Create a controller for the window and run
-        SignInController controller = (loader.getController());
-        controller.setStageSignIn(stageSignIn);
-        controller.initStage(root);
-        stageSignUp.close();
+        LOG.log(Level.INFO, "Going back to sign in.");
+        stage.close();
     }
 
     /**
      * Method to get the stage in order to use in in the window
      *
-     * @return SignUp Stage object.
+     * @return the stage needed
      */
-    public Stage getStageSignUp() {
-        return stageSignUp;
+    public Stage getStage() {
+        return stage;
     }
 
     /**
      * Method used to set the stage to the window
      *
-     * @param stageSignUp the stage.
+     * @param stage the stage needed
      */
-    public void seStageSignUp(Stage stageSignUp) {
-        this.stageSignUp = stageSignUp;
+    public void setStage(Stage stage) {
+        this.stage = stage;
     }
 
     /**
@@ -216,48 +165,50 @@ public class SignUpController {
      */
     public void initStage(Parent root) {
         Scene scene = new Scene(root, 691, 405);
-        stageSignUp.setTitle("Sign-up");
-        stageSignUp.setResizable(false);
-        stageSignUp.setScene(scene);
-        // Set text fields empty
-        SignUpTxtUser.setText("");
-        SignUpTxtPass.setText("");
-        SignUpTxtPassAgain.setText("");
-        SignUpTxtEmail.setText("");
-        SignUpTxtName.setText("");
-
-        // Call method that handles how the elements show up
-        handleWindowShowing();
-        stageSignUp.show();
-        stageSignUp.setOnCloseRequest(this::setOnCloseRequest);
+        stage = new Stage();
+        LOG.log(Level.INFO, "Entering sign-up window");
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setTitle("Sign-up");
+        stage.setResizable(false);
+        stage.setScene(scene);
+        //It sets listeners to the text fields with a method that checks if they are empty
+        txtUserRegister.textProperty().addListener(this::textChanged);
+        txtPassRegister.textProperty().addListener(this::textChanged);
+        txtPassAgain.textProperty().addListener(this::textChanged);
+        txtEmail.textProperty().addListener(this::textChanged);
+        txtName.textProperty().addListener(this::textChanged);
+        //It sets the method that controls the showing of the window
+        stage.setOnShowing(this::handleWindowShowing);
+        stage.show();
     }
 
     /**
      * Method used to set various additions to the elements, like tooltip
      * buttons, or addition of listeners.
+     *
+     * @param event the event executed
      */
-    private void handleWindowShowing() {
+    private void handleWindowShowing(Event event) {
         //It disables the signup button
-        SignUpBtnSignUp.setDisable(true);
+        btnSignUpRegister.setDisable(true);
+        //It resets the content of the text fields
+        txtUserRegister.setText("");
+        txtPassRegister.setText("");
+        txtPassAgain.setText("");
+        txtEmail.setText("");
+        txtName.setText("");
 
         //It sets tooltips in the buttons and text fields, to tell the user about them
-        SignUpBtnSignUp.setTooltip(new Tooltip("Click to create an user "
+        btnSignUpRegister.setTooltip(new Tooltip("Click to create an user "
                 + "with this credentials"));
-        SignUpBtnBack.setTooltip(new Tooltip("Click to go back "
+        btnBack.setTooltip(new Tooltip("Click to go back "
                 + "to the login"));
-        SignUpTxtUser.setTooltip(new Tooltip("Between 5 and 20 characters"));
-        SignUpTxtPass.setTooltip(new Tooltip("Contains lower-case, "
+        txtUserRegister.setTooltip(new Tooltip("Between 5 and 20 characters"));
+        txtPassRegister.setTooltip(new Tooltip("Contains lower-case, "
                 + "upper-case and numbers"));
-        SignUpTxtPassAgain.setTooltip(new Tooltip("Repeat password"));
-        SignUpTxtEmail.setTooltip(new Tooltip("Valid format e-mail"));
-        SignUpTxtName.setTooltip(new Tooltip("Write your name and surname"));
-
-        //It sets listeners to the text fields with a method that checks if they are empty
-        SignUpTxtUser.textProperty().addListener(this::textChanged);
-        SignUpTxtPass.textProperty().addListener(this::textChanged);
-        SignUpTxtPassAgain.textProperty().addListener(this::textChanged);
-        SignUpTxtEmail.textProperty().addListener(this::textChanged);
-        SignUpTxtName.textProperty().addListener(this::textChanged);
+        txtPassAgain.setTooltip(new Tooltip("Repeat password"));
+        txtEmail.setTooltip(new Tooltip("Valid format e-mail"));
+        txtName.setTooltip(new Tooltip("Write your name and surname"));
     }
 
     /**
@@ -272,36 +223,36 @@ public class SignUpController {
         boolean error = false;
         String alertList = "";
         //Checks if the user is long enough
-        if (SignUpTxtUser.getText().length() < 5) {
+        if (txtUserRegister.getText().length() < 5) {
             error = true;
             alertList = alertList.concat("The username is too short.\n");
         }
         //Checks if the user is too long
-        if (SignUpTxtUser.getText().length() > 20) {
+        if (txtUserRegister.getText().length() > 20) {
             error = true;
             alertList = alertList.concat("The username is too long.\n");
         }
         //Checks if the password meets the requirements
-        if (isValidPass(SignUpTxtPass.getText()) == false) {
+        if (isValidPass(txtPassRegister.getText()) == false) {
             error = true;
-            alertList = alertList.concat("The password has to contain\nat least an upper-case,\nlower-case and a number.\n");
+            alertList = alertList.concat("The password needs to contain at least an upper-case, lower-case and a number.\n");
         }
-        //Checks if the password is too short 
-        if (SignUpTxtPass.getText().length() < 5) {
+        //Checks if the password is too short
+        if (txtPassRegister.getText().length() < 5) {
             error = true;
             alertList = alertList.concat("The password is too short.\n");
         }
         //Checks if the password and its confirmation are the same
-        if (!SignUpTxtPass.getText().equals(SignUpTxtPassAgain.getText())) {
+        if (!txtPassRegister.getText().equals(txtPassAgain.getText())) {
             error = true;
             alertList = alertList.concat("The passwords don´t match.\n");
         }
         //Checks if the email has a valid format
-        if (!isValidEmail(SignUpTxtEmail.getText())) {
+        if (!isValidEmail(txtEmail.getText())) {
             error = true;
             alertList = alertList.concat("The email format is not valid.\n");
         }
-        // Show alert if any or more errors exist
+        //Shows an alert with any errors there might have been
         if (error) {
             Alert listAllAlerts = new Alert(AlertType.ERROR,
                     alertList, ButtonType.OK);
@@ -362,15 +313,12 @@ public class SignUpController {
      * observed
      */
     private void textChanged(Observable observable) {
-        // If all buttons contain text
-        if (SignUpTxtUser.getText().trim().equals("") || SignUpTxtPass.getText().trim().equals("")
-                || SignUpTxtPassAgain.getText().trim().equals("") || SignUpTxtEmail.getText().trim().equals("")
-                || SignUpTxtName.getText().trim().equals("")) {
-            // Set SignUpBtnSignUp to enabled
-            SignUpBtnSignUp.setDisable(true);
+        if (txtUserRegister.getText().trim().equals("") || txtPassRegister.getText().trim().equals("")
+                || txtPassAgain.getText().trim().equals("") || txtEmail.getText().trim().equals("")
+                || txtName.getText().trim().equals("")) {
+            btnSignUpRegister.setDisable(true);
         } else {
-            // Set SignUpBtnSignUp to disabled
-            SignUpBtnSignUp.setDisable(false);
+            btnSignUpRegister.setDisable(false);
         }
     }
 }

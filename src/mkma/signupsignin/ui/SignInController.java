@@ -21,6 +21,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import mkma.signupsignin.signable.SignableFactory;
 import signable.Signable;
 import user_message.User;
@@ -34,10 +35,14 @@ import user_message.User;
 public class SignInController {
 
     /**
+     * Logger that will be use during the execution
+     */
+    final Logger LOG = Logger.getLogger("mkma.signupsignin.ui.SignInController.java");
+    /**
      * The stage itself
      */
     @FXML
-    private Stage stageSignIn;
+    private Stage stage;
     /**
      * Textfield for the user
      */
@@ -57,29 +62,33 @@ public class SignInController {
      * Button to go to the sign up
      */
     @FXML
-    private Button SignInbtnSignUp;
+    private Button btnSignUp;
 
     /**
      * This method gets launched whenever the user hits the login button In case
      * the username is either longer than 20 or shorther than 5 chars it will
      * send and alert. IF there is no error and everything goes through the
      * applicattions main window will be launched.
-     * 
+     *
      * @param event current event.
-     * @throws IOException when there is an input/output error
+     * @throws IOException when there are input/output errors
      */
     @FXML
     private void handleButtonSignIn(ActionEvent event) throws IOException {
-        Logger.getLogger(SignInController.class.getName()).log(Level.INFO,"SignIn Button Clicked");
+
         boolean error = false;
         String alertError = null;
         boolean alertNeeded = false;
+
+        LOG.log(Level.INFO, "Attempt to sign in");
+
         if (this.txtUser.getText().trim().length() < 5) {
             Alert alertShortUser = new Alert(Alert.AlertType.ERROR, "Username is"
                     + " too short", ButtonType.OK);
             Button okButton = (Button) alertShortUser.getDialogPane().lookupButton(ButtonType.OK);
             okButton.setId("btnOkS");
             alertShortUser.showAndWait();
+            LOG.log(Level.INFO, "The user " + txtUser.getText() + " introduced a username that is too short.");
             error = true;
         }
         if (this.txtUser.getText().trim().length() > 20) {
@@ -89,29 +98,35 @@ public class SignInController {
             okButton.setId("btnOkL");
 
             alertlongUser.showAndWait();
+            LOG.log(Level.INFO, "The user " + txtUser.getText() + " introduced a username that is too long.");
             error = true;
         }
         if (!error) {
             User user = new User();
             user.setLogin(txtUser.getText());
             user.setPassword(txtPass.getText());
-            Logger.getLogger(SignUpController.class.getName()).log(Level.INFO,"New Petition to the server by: " + user.getLogin());
+            LOG.log(Level.INFO, "Petition created by: " + user.getLogin());
             SignableFactory factory = new SignableFactory();
             Signable signable = factory.getSignable();
             try {
                 user = signable.signIn(user);
-                openLogOutWindow(user);
+                openWindow(stage, user);
+                LOG.log(Level.INFO, "The user " + user.getLogin() + " successfully signed in.");
             } catch (UserNotFoundException | PassNotCorrectException ex) {
                 alertNeeded = true;
                 alertError = "User or password are incorrect.";
-                
+                LOG.log(Level.INFO, "The user " + user.getLogin() + " introduced the wrong password.");
             } catch (DataBaseConnectionException | ServerErrorException | TimeOutException ex) {
                 alertNeeded = true;
                 alertError = "An unexpected error ocurred on the server.";
+                LOG.log(Level.INFO, "The user " + user.getLogin() + " couldn't connect to the server.");
             }
+
             if (alertNeeded) {
                 Alert exceptionAlert = new Alert(Alert.AlertType.ERROR,
                         alertError, ButtonType.OK);
+                Button okButton = (Button) exceptionAlert.getDialogPane().lookupButton(ButtonType.OK);
+                okButton.setId("btnOkH");
                 exceptionAlert.showAndWait();
             }
 
@@ -125,16 +140,9 @@ public class SignInController {
      * @param event event used
      * @throws IOException when there are input/output errors.
      */
-
     @FXML
     private void handleButtonSignUp(ActionEvent event) throws IOException {
-        Stage stageSignUp = new Stage();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("SignUp.fxml"));
-        Parent root = (Parent) loader.load();
-        SignUpController controller = (loader.getController());
-        controller.seStageSignUp(stageSignUp);
-        controller.initStage(root);
-        stageSignIn.close();
+        start_signup(stage);
     }
 
     /**
@@ -142,16 +150,18 @@ public class SignInController {
      *
      * @return returns the stage
      */
-    public Stage getStageSignIn() {
-        return stageSignIn;
+    public Stage getStage() {
+        return stage;
     }
-    
+
     /**
      * Method that sets the stage
+     *
      * @param stage Stage used
      */
-    public void setStageSignIn(Stage stage) {
-        this.stageSignIn = stage;
+
+    public void setStage(Stage stage) {
+        this.stage = stage;
     }
 
     /**
@@ -161,27 +171,29 @@ public class SignInController {
      */
     public void initStage(Parent root) {
         Scene scene = new Scene(root);
-        stageSignIn.setScene(scene);
-        stageSignIn.setResizable(false);
-        stageSignIn.setTitle("Sign In");
-        handleWindowShowing();
+        stage.setScene(scene);
+        stage.setResizable(false);
+        stage.setTitle("Sign In");
+
+        stage.setOnShowing(this::handleWindowShowing);
         txtUser.textProperty().addListener((this::textchanged));
         txtPass.textProperty().addListener((this::textchanged));
-        stageSignIn.show();
+        stage.show();
 
     }
 
     /**
      * When the window's first launched, sets the logIn button to disabled and
      * adds 2 tooltips.
+     * @param event The window.
      */
-    private void handleWindowShowing() {
+    private void handleWindowShowing(WindowEvent event) {
+        LOG.log(Level.INFO, "Window launched");
+        btnSignIn.setDisable(true);
         txtUser.setText("");
         txtPass.setText("");
-        btnSignIn.setDisable(true);
-        SignInbtnSignUp.setTooltip(new Tooltip("Click to sign up!"));
+        btnSignUp.setTooltip(new Tooltip("Click to sign up!"));
         btnSignIn.setTooltip(new Tooltip("Click to log in!"));
-
     }
 
     /**
@@ -201,19 +213,32 @@ public class SignInController {
     }
 
     /**
-     * Launches the main window
+     * Method to invoke the signup window
      *
+     * @param primaryStage Main stage
+     * @throws IOException IO issues
+     */
+    private void start_signup(Stage primaryStage) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("SignUp.fxml"));
+        Parent root = (Parent) loader.load();
+        SignUpController controller = (loader.getController());
+        controller.setStage(primaryStage);
+        controller.initStage(root);
+    }
+
+    /**
+     * Launches the main window
+     * @param logOutStage Stage for the log out window
      * @param user user used
      * @throws IOException IO issue
      */
-    private void openLogOutWindow(User user) throws IOException {
-        Stage stageLogOut = new Stage();
+    private void openWindow(Stage logOutStage, User user) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("SignOut.fxml"));
         Parent root = (Parent) loader.load();
+
         LogOutController controller = (loader.getController());
         controller.setUsername(user);
-        controller.setStageLogOut(stageLogOut);
+        controller.setStage(logOutStage);
         controller.initStage(root);
-        stageSignIn.close();
     }
 }

@@ -46,28 +46,31 @@ public class SignableImplementation implements Signable {
             worker.start();
             worker.join();
 
-            received = worker.getReceived();
+            try {
+                received = worker.getReceived();
 
-            switch (received.getMessageType()) {
+                switch (received.getMessageType()) {
 
-                case DATABASEERROR:
-                    throw new DataBaseConnectionException();
-                case PASSNOTCORRECT:
-                    throw new PassNotCorrectException();
-                case SERVERERROR:
-                    throw new ServerErrorException();
-                case TIMEOUTEXCEPTION:
-                    throw new TimeOutException();
-                case USERNOTFOUND:
-                    throw new UserNotFoundException();
-                default:
-                    break;
+                    case DATABASEERROR:
+                        throw new DataBaseConnectionException();
+                    case PASSNOTCORRECT:
+                        throw new PassNotCorrectException();
+                    case SERVERERROR:
+                        throw new ServerErrorException();
+                    case TIMEOUTEXCEPTION:
+                        throw new TimeOutException();
+                    case USERNOTFOUND:
+                        throw new UserNotFoundException();
+                    default:
+                        break;
+                }
+            } catch (NullPointerException ex) {
+                throw new TimeOutException();
             }
-        } catch (NullPointerException x) {
-            // Server will be offline.
-            throw new TimeOutException();
         } catch (InterruptedException ex) {
             Logger.getLogger(SignableImplementation.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NullPointerException npex){
+            throw new DataBaseConnectionException();
         }
 
         return received.getUser();
@@ -77,13 +80,13 @@ public class SignableImplementation implements Signable {
      * This method creates a message with the user and sends it to the server,
      * in order to add him to the database.
      *
-     * @param user the user that needs a Sign-up.
-     * @return the user to check if the method was successful.
+     * @param user the user that needs a sign-up
+     * @return the user to check if the method was successful
      * @throws DataBaseConnectionException when there is an error connecting to
-     * the database.
-     * @throws ServerErrorException when there is an error in the server.
-     * @throws TimeOutException when the server times out.
-     * @throws UserExistsException when the user already exists.
+     * the database
+     * @throws ServerErrorException when there is an error in the server
+     * @throws TimeOutException when the server times out
+     * @throws UserExistsException when the user already exists
      */
     @Override
     public User signUp(User user) throws DataBaseConnectionException, ServerErrorException, TimeOutException, UserExistsException {
@@ -97,7 +100,7 @@ public class SignableImplementation implements Signable {
             worker.start();
             worker.join();
             received = worker.getReceived();
-
+            try {
             switch (received.getMessageType()) {
 
                 case DATABASEERROR:
@@ -111,9 +114,10 @@ public class SignableImplementation implements Signable {
                 default:
                     break;
             }
-        } catch (NullPointerException x) {
-            // Server will be offline.
-            throw new TimeOutException();
+            } catch (NullPointerException ex) {
+                throw new TimeOutException();
+            }
+
         } catch (InterruptedException ex) {
             Logger.getLogger(SignableImplementation.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -128,7 +132,6 @@ public class SignableImplementation implements Signable {
      */
     @Override
     public User signOut(User user) {
-
         return user;
 
     }
