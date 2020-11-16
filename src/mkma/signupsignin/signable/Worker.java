@@ -86,6 +86,7 @@ public class Worker extends Thread {
                 } catch (IOException ex) {
                     System.out.println(ex.getMessage());
                 }
+
             } catch (NullPointerException ex) {
                 Logger.getLogger(Worker.class.getName()).log(Level.SEVERE, "Connection failed");
             }

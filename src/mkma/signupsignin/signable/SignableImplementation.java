@@ -45,6 +45,7 @@ public class SignableImplementation implements Signable {
             Worker worker = new Worker(message);
             worker.start();
             worker.join();
+
             try {
                 received = worker.getReceived();
 
@@ -66,9 +67,10 @@ public class SignableImplementation implements Signable {
             } catch (NullPointerException ex) {
                 throw new TimeOutException();
             }
-
         } catch (InterruptedException ex) {
             Logger.getLogger(SignableImplementation.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NullPointerException npex){
+            throw new DataBaseConnectionException();
         }
 
         return received.getUser();
@@ -130,7 +132,6 @@ public class SignableImplementation implements Signable {
      */
     @Override
     public User signOut(User user) {
-
         return user;
 
     }
