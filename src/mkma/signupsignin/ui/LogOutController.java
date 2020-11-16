@@ -13,6 +13,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import user_message.User;
 
@@ -22,7 +23,7 @@ import user_message.User;
  *
  * @author Martin Gros
  */
-public class LogOutController implements Initializable {
+public class LogOutController {
 
     @FXML
     private Stage stage;
@@ -30,25 +31,20 @@ public class LogOutController implements Initializable {
     private Button btnClose;
     @FXML
     private Text txtWindow;
+    /**
+     * Logger for the sign out window
+     */
+    static final Logger LOG = Logger.getLogger("mkma.signupsignin.ui.LogOutController.java");
 
-    @FXML
     /**
      * Whenever the user hits the back button it will send him back to the log
      * in window.
      */
-
+    @FXML
     private void handleButtonClose(ActionEvent event) throws IOException {
+        LOG.log(Level.INFO, "Going back to sign in");
         //It gets the FXML of the sign-in window
-        final Logger LOG = Logger.getLogger(LogOutController.class.getName());
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("SignIn.fxml"));
-        Parent root = (Parent) loader.load();
-        //It creates a controller for the window and runs it
-        SignInController controller = (loader.getController());
-        controller.setStage(stage);
-        controller.initStage(root);
-      
-        LOG.log(Level.INFO, "User successfully signed out.");
-
+        stage.close();
     }
 
     public Stage getStage() {
@@ -66,15 +62,13 @@ public class LogOutController implements Initializable {
      */
     public void initStage(Parent root) {
         Scene scene = new Scene(root);
+        LOG.log(Level.INFO, "Log out window showing");
+        stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
         stage.setScene(scene);
-        stage.setTitle("Sign In");
+        stage.setTitle("Log out");
         stage.setResizable(false);
         stage.show();
-    }
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-
     }
 
     /**

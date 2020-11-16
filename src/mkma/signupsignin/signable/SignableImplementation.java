@@ -45,29 +45,28 @@ public class SignableImplementation implements Signable {
             Worker worker = new Worker(message);
             worker.start();
             worker.join();
-            try{
-            received = worker.getReceived();
-            
 
-            switch (received.getMessageType()) {
+            try {
+                received = worker.getReceived();
 
-                case DATABASEERROR:
-                    throw new DataBaseConnectionException();
-                case PASSNOTCORRECT:
-                    throw new PassNotCorrectException();
-                case SERVERERROR:
-                    throw new ServerErrorException();
-                case TIMEOUTEXCEPTION:
-                    throw new TimeOutException();
-                case USERNOTFOUND:
-                    throw new UserNotFoundException();
-                default:
-                    break;
-            }
-            }catch (NullPointerException ex) {
+                switch (received.getMessageType()) {
+
+                    case DATABASEERROR:
+                        throw new DataBaseConnectionException();
+                    case PASSNOTCORRECT:
+                        throw new PassNotCorrectException();
+                    case SERVERERROR:
+                        throw new ServerErrorException();
+                    case TIMEOUTEXCEPTION:
+                        throw new TimeOutException();
+                    case USERNOTFOUND:
+                        throw new UserNotFoundException();
+                    default:
+                        break;
+                }
+            } catch (NullPointerException ex) {
                 throw new TimeOutException();
             }
-
         } catch (InterruptedException ex) {
             Logger.getLogger(SignableImplementation.class.getName()).log(Level.SEVERE, null, ex);
         } catch (NullPointerException npex){
@@ -101,7 +100,7 @@ public class SignableImplementation implements Signable {
             worker.start();
             worker.join();
             received = worker.getReceived();
-
+            try {
             switch (received.getMessageType()) {
 
                 case DATABASEERROR:
@@ -114,6 +113,9 @@ public class SignableImplementation implements Signable {
                     throw new UserExistsException();
                 default:
                     break;
+            }
+            } catch (NullPointerException ex) {
+                throw new TimeOutException();
             }
 
         } catch (InterruptedException ex) {

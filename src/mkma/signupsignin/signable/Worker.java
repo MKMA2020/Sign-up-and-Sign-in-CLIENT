@@ -86,8 +86,9 @@ public class Worker extends Thread {
                 } catch (IOException ex) {
                     System.out.println(ex.getMessage());
                 }
-            } catch (NullPointerException e) {
-                Logger.getLogger(Worker.class.getName()).log(Level.SEVERE, "Connection refused");
+
+            } catch (NullPointerException ex) {
+                Logger.getLogger(Worker.class.getName()).log(Level.SEVERE, "Connection failed");
             }
         }
     }
