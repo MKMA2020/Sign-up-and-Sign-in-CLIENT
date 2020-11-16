@@ -3,6 +3,8 @@ package mkma.signupsignin.ui;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -37,12 +39,14 @@ public class LogOutController implements Initializable {
 
     private void handleButtonClose(ActionEvent event) throws IOException {
         //It gets the FXML of the sign-in window
+        final Logger LOG = Logger.getLogger(LogOutController.class.getName());
         FXMLLoader loader = new FXMLLoader(getClass().getResource("SignIn.fxml"));
         Parent root = (Parent) loader.load();
         //It creates a controller for the window and runs it
         SignInController controller = (loader.getController());
         controller.setStage(stage);
         controller.initStage(root);
+        LOG.log(Level.INFO, "User successfully signed out.");
     }
 
     public Stage getStage() {
@@ -64,7 +68,6 @@ public class LogOutController implements Initializable {
         stage.setTitle("Sign In");
         stage.setResizable(false);
         stage.show();
-
     }
 
     @Override

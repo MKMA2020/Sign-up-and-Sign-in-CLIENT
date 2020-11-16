@@ -83,6 +83,7 @@ public class SignInController {
             Button okButton = (Button) alertShortUser.getDialogPane().lookupButton(ButtonType.OK);
             okButton.setId("btnOkS");
             alertShortUser.showAndWait();
+            LOG.log(Level.INFO, "The user " + txtUser.getText() + " introduced a username that is too short.");
             error = true;
         }
         if (this.txtUser.getText().trim().length() > 20) {
@@ -92,6 +93,7 @@ public class SignInController {
             okButton.setId("btnOkL");
 
             alertlongUser.showAndWait();
+            LOG.log(Level.INFO, "The user " + txtUser.getText() + " introduced a username that is too long.");
             error = true;
         }
         if (!error) {
@@ -104,12 +106,15 @@ public class SignInController {
             try {
                 user = signable.signIn(user);
                 openWindow(stage, user);
+                LOG.log(Level.INFO, "The user " + user.getLogin() + " successfully signed in.");
             } catch (UserNotFoundException | PassNotCorrectException ex) {
                 alertNeeded = true;
                 alertError = "User or password are incorrect.";
+                LOG.log(Level.INFO, "The user " + user.getLogin() + " introduced the wrong password.");
             } catch (DataBaseConnectionException | ServerErrorException | TimeOutException ex) {
                 alertNeeded = true;
                 alertError = "An unexpected error ocurred on the server.";
+                LOG.log(Level.INFO, "The user " + user.getLogin() + " couldn't connect to the server.");
             }
 
             if (alertNeeded) {
@@ -162,25 +167,16 @@ public class SignInController {
         stage.setScene(scene);
         stage.setResizable(false);
         stage.setTitle("Sign In");
-        handleWindowShowing();
-        txtUser.textProperty().addListener((this::textchanged));
-        txtPass.textProperty().addListener((this::textchanged));
-        stage.show();
 
-    }
-
-    /**
-     * When the window's first launched, sets the logIn button to disabled and
-     * adds 2 tooltips.
-     */
-
-    private void handleWindowShowing() {
         txtUser.setText("");
         txtPass.setText("");
         btnSignIn.setDisable(true);
         btnSignUp.setTooltip(new Tooltip("Click to sign up!"));
         btnSignIn.setTooltip(new Tooltip("Click to log in!"));
-
+        
+        txtUser.textProperty().addListener((this::textchanged));
+        txtPass.textProperty().addListener((this::textchanged));
+        stage.show();
     }
 
     /**
@@ -218,7 +214,6 @@ public class SignInController {
     /**
      * Launches the main window
      *
-     * @param primaryStage Main stage
      * @param logOutStage Stage for the log out window
      * @param user user used
      * @throws IOException IO issue

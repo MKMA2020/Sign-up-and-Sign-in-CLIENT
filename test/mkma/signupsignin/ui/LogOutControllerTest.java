@@ -5,15 +5,12 @@
  */
 package mkma.signupsignin.ui;
 
-import java.util.concurrent.TimeoutException;
 import javafx.stage.Stage;
 import mkma.signupsignin.application.App;
-import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import static org.testfx.api.FxAssert.verifyThat;
-import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit.ApplicationTest;
 import static org.testfx.matcher.base.NodeMatchers.isVisible;
 
@@ -33,32 +30,18 @@ public class LogOutControllerTest extends ApplicationTest{
     @Override
     public void stop(){}
     
-    @BeforeClass
-    public static void setUpClass() throws TimeoutException {
-        FxToolkit.registerPrimaryStage();
-        FxToolkit.setupApplication(App.class);
-   }
-    
     /**
      * Method that leads to the logout window and then checks whether it exists or not.
      */
     @Test
-    public void testA_initislstate() {
+    public void testA_initislstate_return() {
         clickOn("#txtUser");
         write("kerman");
         clickOn("#txtPass");
         write("1Aqwe");
         clickOn("#btnSignIn");
         verifyThat("#windowSignOut", isVisible());
-    }
-    
-    /**
-     * Method that returns to the login window and checks whether it exists or not.
-     */
-    @Test
-    public void testB_goBack(){
         clickOn("#btnClose");
         verifyThat("#windowSignIn", isVisible());
-    }
-    
+    }  
 }
